@@ -1,0 +1,30 @@
+name: "Publish"
+on:
+  release:
+    types:
+      - published
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.x
+      - run: yarn install
+      - name: Publish
+        run: yarn vscode:publish
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+      - name: Create package
+        run: yarn vsce package
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: wave-dash-unify-*.vsix

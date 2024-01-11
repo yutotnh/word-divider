@@ -1,0 +1,30 @@
+name: "Dev Containers"
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - "main"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build and run dev container task
+        uses: devcontainers/ci@v0.3
+        with:
+          push: never
+          runCmd: |
+            # In runCmd, processing continues except for the last command, even if the exit status is not 0.
+            set -e
+
+            # Install dependencies
+            yarn install
+
+            # Execute a test
+            xvfb-run -a yarn test
