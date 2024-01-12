@@ -2,12 +2,19 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
 
+let logOutputChannel: vscode.LogOutputChannel;
+
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
   // Use the console to output diagnostic information (console.log) and errors (console.error)
   // This line of code will only be executed once when your extension is activated
   console.log('Congratulations, your extension "word-divider" is now active!');
+
+  const extensionDisplayName = "Word Divider";
+  logOutputChannel = vscode.window.createOutputChannel(extensionDisplayName, {
+    log: true,
+  });
 
   // The command has been defined in the package.json file
   // Now provide the implementation of the command with registerCommand
@@ -47,6 +54,25 @@ export function getWordSeparatorsRegExp(wordSeparetors: string) {
   wordSeparatorsRegExp += "]+)";
 
   return new RegExp(wordSeparatorsRegExp, "g");
+}
+
+/**
+ * editor.wordSeparators を取得する
+ * - editor.wordSeparators が文字列でない場合や取得できない場合は空文字を返す
+ * @returns editor.wordSeparators
+ */
+export function getWordSeparators() {
+  const config = vscode.workspace.getConfiguration("editor");
+  const wordSeparators = config.get("wordSeparators");
+
+  if (typeof wordSeparators !== "string") {
+    logOutputChannel.warn(
+      'Could not get editor.wordSeparators.\nContinue processing as editor.wordSeparators="".',
+    );
+    return "";
+  }
+
+  return wordSeparators;
 }
 
 /**

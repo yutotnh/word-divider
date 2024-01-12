@@ -122,4 +122,22 @@ suite("Extension Test Suite", () => {
       "a.b.c".split(extension.getWordSeparatorsRegExp(".*")),
     );
   });
+
+  // vscodeの設定を変更・取得するのは時間がかかりデフォルトのタイムアウト時間では間に合わない場合がある
+  // そのため、確実にテストが完了するようにテストのタイムアウト時間を20sにする
+  test("getWordSeparators", async () => {
+    // 区切り文字が取得できることを確認する
+    const wordSeparatorsList = ["`~!", "@#$%^&*()"];
+
+    for (const wordSeparators of wordSeparatorsList) {
+      const waveDashUnifyConfig = vscode.workspace.getConfiguration("editor");
+      await waveDashUnifyConfig.update(
+        "wordSeparators",
+        wordSeparators,
+        vscode.ConfigurationTarget.Global,
+      );
+
+      assert.strictEqual(wordSeparators, extension.getWordSeparators());
+    }
+  }).timeout("20s");
 });
