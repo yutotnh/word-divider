@@ -19,16 +19,233 @@ export function activate(context: vscode.ExtensionContext) {
   // The command has been defined in the package.json file
   // Now provide the implementation of the command with registerCommand
   // The commandId parameter must match the command field in package.json
-  const disposable = vscode.commands.registerCommand(
-    "word-divider.helloWorld",
-    () => {
-      // The code you place here will be executed every time your command is executed
-      // Display a message box to the user
-      vscode.window.showInformationMessage("Hello World from Word Divider!");
-    },
+  context.subscriptions.push(
+    vscode.commands.registerCommand("word-divider.cursorWordLeft", () => {
+      const editor = vscode.window.activeTextEditor;
+      if (!editor) {
+        return;
+      }
+
+      editor.selections = editor.selections.map((selection) => {
+        const position = selection.active;
+
+        const line = position.line;
+        const lineText = editor.document.lineAt(line).text;
+
+        const segments = stringToSegments(splitByAll([lineText]), false);
+
+        const wordLeftPos = wordLeftPosition(segments, position.character);
+
+        if (wordLeftPos === -1) {
+          if (line === 0) {
+            return selection;
+          } else {
+            const previousLine = line - 1;
+            const lineText = editor.document.lineAt(previousLine).text;
+
+            const segments = stringToSegments(splitByAll([lineText]), false);
+
+            let wordLeftPos = wordLeftPosition(segments, lineText.length);
+
+            if (wordLeftPos === -1) {
+              wordLeftPos = 0;
+            }
+
+            const newPosition = new vscode.Position(previousLine, wordLeftPos);
+
+            const newSelection = new vscode.Selection(newPosition, newPosition);
+
+            return newSelection;
+          }
+        }
+
+        const newPosition = position.with({
+          character: wordLeftPos,
+        });
+
+        const newSelection = new vscode.Selection(newPosition, newPosition);
+
+        return newSelection;
+      });
+    }),
   );
 
-  context.subscriptions.push(disposable);
+  context.subscriptions.push(
+    vscode.commands.registerCommand("word-divider.cursorWordEndRight", () => {
+      const editor = vscode.window.activeTextEditor;
+      if (!editor) {
+        return;
+      }
+
+      editor.selections = editor.selections.map((selection) => {
+        const position = selection.active;
+
+        const line = position.line;
+        const lineText = editor.document.lineAt(line).text;
+
+        const segments = stringToSegments(splitByAll([lineText]), true);
+
+        const wordEndRightPos = wordEndRightPosition(
+          segments,
+          position.character,
+        );
+
+        if (wordEndRightPos === -1) {
+          if (line === editor.document.lineCount - 1) {
+            return selection;
+          } else {
+            const nextLine = line + 1;
+            const lineText = editor.document.lineAt(nextLine).text;
+
+            const segments = stringToSegments(splitByAll([lineText]), true);
+
+            let wordEndRightPos = wordEndRightPosition(segments, 0);
+
+            if (wordEndRightPos === -1) {
+              wordEndRightPos = lineText.length;
+            }
+
+            const newPosition = new vscode.Position(nextLine, wordEndRightPos);
+
+            const newSelection = new vscode.Selection(newPosition, newPosition);
+
+            return newSelection;
+          }
+        }
+
+        const newPosition = position.with({
+          character: wordEndRightPos,
+        });
+
+        const newSelection = new vscode.Selection(newPosition, newPosition);
+
+        return newSelection;
+      });
+    }),
+  );
+}
+
+/**
+ * 指定した位置から見た単語の先頭の位置を取得する
+ * - 単語の先頭の位置がない場合は-1を返す
+ * @param segments 文字列をSegmentに変換した配列
+ * @param position 位置
+ * @returns
+ */
+export function wordLeftPosition(segments: Segment[], position: number) {
+  if (position <= 0) {
+    return -1;
+  }
+
+  let result = 0;
+  let currentPosition = 0;
+  for (let i = 0; i < segments.length; i++) {
+    const segment = segments[i];
+
+    if (segment.isWord) {
+      if (currentPosition < position) {
+        result = currentPosition;
+      } else {
+        return result;
+      }
+    }
+
+    currentPosition += segment.segment.length;
+  }
+
+  return result;
+}
+
+/**
+ * 指定した位置から見た単語の終わりの位置を取得する
+ * - 単語の終わりの位置がない場合は-1を返す
+ * @param segments 文字列をSegmentに変換した配列
+ * @param position 位置
+ */
+export function wordEndRightPosition(segments: Segment[], position: number) {
+  if (segments.length === 0) {
+    return -1;
+  }
+
+  let currentPosition = 0;
+  for (let i = 0; i < segments.length; i++) {
+    const segment = segments[i];
+
+    currentPosition += segment.segment.length;
+    if (segment.isWord) {
+      if (currentPosition <= position) {
+        // 単語の終わりの位置を取得する
+      } else {
+        return currentPosition;
+      }
+    }
+
+    if (i === segments.length - 1 && currentPosition === position) {
+      return -1;
+    }
+  }
+
+  return currentPosition;
+}
+
+interface Segment {
+  segment: string;
+  isWord: boolean;
+}
+
+/**
+ * 文字列をSegmentに変換する
+ * - 空白文字はisWord=false
+ * - editor.wordSeparators中の1文字からなる要素はisWord=false
+ *   - ただし、isRight=true の時は前が空白文字の場合はisWord=true
+ *   - ただし、isRight=falseの時は後が空白文字の場合はisWord=true
+ * - それ以外はisWord=true
+ * @param strings
+ * @returns Segmentの配列
+ */
+export function stringToSegments(strings: string[], isRight: boolean) {
+  const result: Segment[] = [];
+
+  const wordSeparators = getWordSeparators();
+  const wordSeparatorsRegExp = getWordSeparatorsRegExp(
+    escapeRegExp(wordSeparators),
+  );
+
+  for (let i = 0; i < strings.length; i++) {
+    const string = strings[i];
+
+    if (string.match(/^\s+$/g)) {
+      result.push({ segment: string, isWord: false });
+      continue;
+    }
+
+    if (!string.match(wordSeparatorsRegExp)) {
+      result.push({ segment: string, isWord: true });
+      continue;
+    }
+
+    if (string.length !== 1) {
+      result.push({ segment: string, isWord: true });
+      continue;
+    }
+
+    if (!isRight && 0 < i && strings[i - 1].match(/^\s+$/g)) {
+      result.push({ segment: string, isWord: true });
+      continue;
+    } else if (
+      isRight &&
+      i < strings.length - 1 &&
+      strings[i + 1].match(/^\s+$/g)
+    ) {
+      result.push({ segment: string, isWord: true });
+      continue;
+    } else {
+      result.push({ segment: string, isWord: false });
+      continue;
+    }
+  }
+
+  return result;
 }
 
 /**
@@ -75,18 +292,45 @@ export function getWordSeparators() {
   return wordSeparators;
 }
 
+export function splitByWordSeparetors(strings: string[]) {
+  const wordSeparetors = getWordSeparators();
+  const wordSeparetorsRegExp = getWordSeparatorsRegExp(
+    escapeRegExp(wordSeparetors),
+  );
+
+  let result: string[] = [];
+
+  for (const string of strings) {
+    result = result.concat(
+      string.split(wordSeparetorsRegExp).filter((word) => word),
+    );
+  }
+
+  // 区切り文字のみの要素が連続している場合に、連続した区切り文字の要素を1つにまとめる
+  // 入力: ["a", ".", ".", "b", "!", "?", "c"]
+  // 期待値: ["a", "..", "b", "!?", "c"]
+  for (let i = 0; i < result.length - 1; i++) {
+    if (result[i].match(wordSeparetorsRegExp)) {
+      if (result[i + 1].match(wordSeparetorsRegExp)) {
+        result[i] = result[i] + result[i + 1];
+        result.splice(i + 1, 1);
+      }
+    }
+  }
+
+  return result;
+}
+
 /**
  * スペースで分割する
  * - スペースは残る
  * - スペースのみの要素が連続している場合に、連続したスペースの要素を1つにまとめる
- * @param stringArray スペースで分割する文字列の配列
- *
- * @todo スペースのみの要素が連続している場合に、連続したスペースの要素を1つにまとめる
+ * @param strings スペースで分割する文字列の配列
  */
-export function splitBySpace(stringArray: string[]) {
+export function splitBySpace(strings: string[]) {
   let result: string[] = [];
 
-  for (const string of stringArray) {
+  for (const string of strings) {
     result = result.concat(string.split(/([\s]+)/g).filter((word) => word));
   }
 
@@ -104,6 +348,43 @@ export function splitBySpace(stringArray: string[]) {
     }
   }
 
+  return result;
+}
+
+/**
+ * 単語で分割する
+ * @param strings 単語で分割する文字列の配列
+ * @returns 単語で分割した文字列の配列
+ * @todo  Intl.Segmenterのlocaleを指定できるようにする
+ */
+export function splitByWord(strings: string[]) {
+  const segmenterFr = new Intl.Segmenter("ja", { granularity: "word" });
+
+  const result: string[] = [];
+
+  for (const string of strings) {
+    const segments = segmenterFr.segment(string);
+
+    for (const segment of segments) {
+      result.push(segment.segment);
+    }
+  }
+
+  return result;
+}
+
+/**
+ * 文字列を分割する
+ * - editor.wordSeparators で指定された文字で分割する
+ * - スペースで分割する
+ * - 単語で分割する
+ * @param strings 分割する文字列の配列
+ * @returns 分割した文字列の配列
+ */
+export function splitByAll(strings: string[]) {
+  let result = splitByWordSeparetors(strings);
+  result = splitBySpace(result);
+  result = splitByWord(result);
   return result;
 }
 

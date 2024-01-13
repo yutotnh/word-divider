@@ -140,4 +140,203 @@ suite("Extension Test Suite", () => {
       assert.strictEqual(wordSeparators, extension.getWordSeparators());
     }
   }).timeout("20s");
+
+  // vscodeの設定を変更・取得するのは時間がかかりデフォルトのタイムアウト時間では間に合わない場合がある
+  // そのため、確実にテストが完了するようにテストのタイムアウト時間を20sにする
+  test("splitByWordSeparetors", async () => {
+    // テストで用いる区切り文字を設定するためデフォルトのeditor.wordSeparatorsを設定する
+    await setDefaultWordSeparators();
+
+    // 区切り文字で分割されることを確認する
+    assert.deepStrictEqual(
+      ["a", ",", "b", "c"],
+      extension.splitByWordSeparetors(["a,", "b", "c"]),
+    );
+
+    // 区切り文字で分割されることを確認する
+    assert.deepStrictEqual(
+      [".", "a", "b", "c"],
+      extension.splitByWordSeparetors([".a", "b", "c"]),
+    );
+
+    // 区切り文字が連続しているときに一つの要素にまとめられることを確認する
+    assert.deepStrictEqual(
+      ["a", ".|", "b", "c"],
+      extension.splitByWordSeparetors(["a.", "|b", "c"]),
+    );
+  }).timeout("20s");
+
+  test("splitByWord", () => {
+    // 単語で分割されることを確認する
+    assert.deepStrictEqual(
+      ["単語", "で", "分割"],
+      extension.splitByWord(["単語で分割"]),
+    );
+
+    // 複数の単語で分割されることを確認する
+    assert.deepStrictEqual(
+      ["分かち書き", "は", "素晴らしい", "!"],
+      extension.splitByWord(["分かち書きは", "素晴らしい!"]),
+    );
+
+    // 連結した英単語は分割されないことを確認する
+    assert.deepStrictEqual(
+      ["concatenatedWords"],
+      extension.splitByWord(["concatenatedWords"]),
+    );
+  });
+
+  // vscodeの設定を変更・取得するのは時間がかかりデフォルトのタイムアウト時間では間に合わない場合がある
+  // そのため、確実にテストが完了するようにテストのタイムアウト時間を20sにする
+  test("split", async () => {
+    // テストで用いる区切り文字を設定するためデフォルトのeditor.wordSeparatorsを設定する
+    await setDefaultWordSeparators();
+
+    assert.deepStrictEqual(
+      ["a", " ", "b", " ", "c"],
+      extension.splitByAll(["a b c"]),
+    );
+
+    assert.deepStrictEqual(
+      [
+        "editor",
+        ".",
+        "wordSeparators",
+        "で",
+        "指定",
+        "さ",
+        "れ",
+        "た",
+        "文字",
+        "で",
+        "分割",
+        "する",
+      ],
+      extension.splitByAll(["editor.wordSeparatorsで指定された文字で分割する"]),
+    );
+  }).timeout("20s");
+
+  test("wordLeftPosition", () => {
+    const segments = [
+      { segment: "abc", isWord: true },
+      { segment: " ", isWord: false },
+      { segment: "def", isWord: true },
+    ];
+
+    assert.deepStrictEqual(extension.wordLeftPosition(segments, 0), -1);
+    assert.deepStrictEqual(extension.wordLeftPosition(segments, 1), 0);
+    assert.deepStrictEqual(extension.wordLeftPosition(segments, 2), 0);
+    assert.deepStrictEqual(extension.wordLeftPosition(segments, 3), 0);
+
+    assert.deepStrictEqual(extension.wordLeftPosition(segments, 4), 0);
+    assert.deepStrictEqual(extension.wordLeftPosition(segments, 5), 4);
+    assert.deepStrictEqual(extension.wordLeftPosition(segments, 6), 4);
+    assert.deepStrictEqual(extension.wordLeftPosition(segments, 7), 4);
+
+    // 空行の場合は-1を返すことの確認
+    assert.deepStrictEqual(extension.wordLeftPosition([], 0), -1);
+  });
+
+  test("wordEndRightPosition", () => {
+    const segments = [
+      { segment: "abc", isWord: true },
+      { segment: ".", isWord: true },
+      { segment: " ", isWord: false },
+      { segment: "def", isWord: true },
+      { segment: " ", isWord: false },
+    ];
+
+    // "abc"
+    assert.deepStrictEqual(extension.wordEndRightPosition(segments, 0), 3);
+    assert.deepStrictEqual(extension.wordEndRightPosition(segments, 1), 3);
+    assert.deepStrictEqual(extension.wordEndRightPosition(segments, 2), 3);
+
+    // "."
+    assert.deepStrictEqual(extension.wordEndRightPosition(segments, 3), 4);
+
+    // " "
+    assert.deepStrictEqual(extension.wordEndRightPosition(segments, 4), 8);
+
+    // "def"
+    assert.deepStrictEqual(extension.wordEndRightPosition(segments, 5), 8);
+    assert.deepStrictEqual(extension.wordEndRightPosition(segments, 6), 8);
+    assert.deepStrictEqual(extension.wordEndRightPosition(segments, 7), 8);
+    assert.deepStrictEqual(extension.wordEndRightPosition(segments, 8), 9);
+
+    // " "
+    assert.deepStrictEqual(extension.wordEndRightPosition(segments, 9), -1);
+
+    // 空行の場合は-1を返すことの確認
+    assert.deepStrictEqual(extension.wordEndRightPosition([], 0), -1, "empty");
+  });
+
+  test("stringToSegments", () => {
+    assert.deepStrictEqual(
+      [
+        { segment: "abc", isWord: true },
+        { segment: " ", isWord: false },
+        { segment: "def", isWord: true },
+      ],
+      extension.stringToSegments(["abc", " ", "def"], false),
+    );
+
+    assert.deepStrictEqual(
+      [
+        { segment: "abc", isWord: true },
+        { segment: "!", isWord: false },
+        { segment: " ", isWord: false },
+        { segment: "def", isWord: true },
+      ],
+      extension.stringToSegments(["abc", "!", " ", "def"], false),
+    );
+
+    assert.deepStrictEqual(
+      [
+        { segment: "abc", isWord: true },
+        { segment: "!", isWord: true },
+        { segment: " ", isWord: false },
+        { segment: "def", isWord: true },
+      ],
+      extension.stringToSegments(["abc", "!", " ", "def"], true),
+    );
+
+    assert.deepStrictEqual(
+      [
+        { segment: "abc", isWord: true },
+        { segment: "!/", isWord: true },
+        { segment: " ", isWord: false },
+        { segment: "def", isWord: true },
+      ],
+      extension.stringToSegments(["abc", "!/", " ", "def"], false),
+    );
+
+    assert.deepStrictEqual(
+      [
+        { segment: "abc", isWord: true },
+        { segment: "!/", isWord: true },
+        { segment: "def", isWord: true },
+      ],
+      extension.stringToSegments(["abc", "!/", "def"], true),
+    );
+
+    assert.deepStrictEqual(
+      [
+        { segment: "abc", isWord: true },
+        { segment: " ", isWord: false },
+        { segment: "!", isWord: true },
+        { segment: " ", isWord: false },
+        { segment: "def", isWord: true },
+      ],
+      extension.stringToSegments(["abc", " ", "!", " ", "def"], false),
+    );
+  });
 });
+
+async function setDefaultWordSeparators() {
+  const waveDashUnifyConfig = vscode.workspace.getConfiguration("editor");
+  await waveDashUnifyConfig.update(
+    "wordSeparators",
+    "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/?",
+    vscode.ConfigurationTarget.Global,
+  );
+}

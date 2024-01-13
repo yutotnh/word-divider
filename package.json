@@ -19,13 +19,22 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onCommand:word-divider.cursorWordLeft",
+    "onCommand:word-divider.cursorWordEndRight"
+  ],
   "main": "./dist/extension.js",
   "contributes": {
-    "commands": [
+    "keybindings": [
       {
-        "command": "word-divider.helloWorld",
-        "title": "Hello World"
+        "key": "ctrl+left",
+        "command": "word-divider.cursorWordLeft",
+        "when": "textInputFocus && !accessibilityModeEnabled"
+      },
+      {
+        "key": "ctrl+right",
+        "command": "word-divider.cursorWordEndRight",
+        "when": "textInputFocus && !accessibilityModeEnabled"
       }
     ]
   },
