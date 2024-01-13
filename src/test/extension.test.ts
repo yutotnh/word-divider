@@ -115,6 +115,14 @@ suite("Extension Test Suite", () => {
       "b",
       "c",
     ]);
+
+    // タブで分割されるか確認する
+    assert.deepStrictEqual(extension.splitBySpace(["a", "\t \tb", "c"]), [
+      "a",
+      "\t \t",
+      "b",
+      "c",
+    ]);
   });
 
   test("getWordSeparatorsRegExp", () => {
@@ -141,6 +149,11 @@ suite("Extension Test Suite", () => {
     assert.deepStrictEqual(
       extension.combileConsecutiveElements(["  ", " "], /^([\s]+)$/),
       ["   "],
+    );
+
+    assert.deepStrictEqual(
+      extension.combileConsecutiveElements(["\t", " ", "\t"], /^([\s]+)$/),
+      ["\t \t"],
     );
 
     assert.deepStrictEqual(
@@ -266,6 +279,12 @@ suite("Extension Test Suite", () => {
     );
 
     assert.deepStrictEqual(["  ", "});"], extension.splitByAll(["  });"]));
+
+    assert.deepStrictEqual(extension.splitByAll(["a\t", " ", "\tb"]), [
+      "a",
+      "\t \t",
+      "b",
+    ]);
   }).timeout("20s");
 
   test("wordLeftPosition", () => {
@@ -435,6 +454,18 @@ suite("Extension Test Suite", () => {
       [
         { segment: "abc", isWord: true },
         { segment: "  ", isWord: true },
+        { segment: "def", isWord: true },
+      ],
+    );
+
+    assert.deepStrictEqual(
+      extension.stringToSegments(
+        ["abc", "\t\t", "def"],
+        extension.PURPOSE.delete,
+      ),
+      [
+        { segment: "abc", isWord: true },
+        { segment: "\t\t", isWord: true },
         { segment: "def", isWord: true },
       ],
     );

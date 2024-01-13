@@ -477,7 +477,7 @@ export function stringToSegments(strings: string[], purpose: Purpose) {
     escapeRegExp(wordSeparators),
   );
 
-  const spaceOnlyRegExp = /^([\s]+)$/;
+  const spaceOnlyRegExp = /^[\s]+$/;
 
   for (let i = 0; i < strings.length; i++) {
     const string = strings[i];
@@ -681,6 +681,9 @@ export function splitByAll(strings: string[]) {
     result,
     new RegExp(wordSeparatorsRegExp.source),
   );
+
+  // SplitBySpace()を実行した後に、タブとスペースが分割されてしまうので、タブとスペースをまとめる
+  result = combileConsecutiveElements(result, /^[\s]+$/);
 
   return result;
 }
