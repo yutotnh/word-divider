@@ -478,10 +478,10 @@ export function escapeRegExp(string: string) {
 
 /**
  * 単語の区切り文字の正規表現を取得する
- * @param wordSeparetors 単語の区切り文字
+ * @param wordSeparators 単語の区切り文字
  */
-export function getWordSeparatorsRegExp(wordSeparetors: string) {
-  const wordSeparatorsArray = wordSeparetors.split("");
+export function getWordSeparatorsRegExp(wordSeparators: string) {
+  const wordSeparatorsArray = wordSeparators.split("");
   let wordSeparatorsRegExp = "([";
 
   for (const wordSeparator of wordSeparatorsArray) {
@@ -512,31 +512,27 @@ export function getWordSeparators() {
   return wordSeparators;
 }
 
-export function splitByWordSeparetors(strings: string[]) {
-  const wordSeparetors = getWordSeparators();
-  const wordSeparetorsRegExp = getWordSeparatorsRegExp(
-    escapeRegExp(wordSeparetors),
+export function splitByWordSeparators(strings: string[]) {
+  const wordSeparators = getWordSeparators();
+  const wordSeparatorsRegExp = getWordSeparatorsRegExp(
+    escapeRegExp(wordSeparators),
   );
 
   let result: string[] = [];
 
   for (const string of strings) {
     result = result.concat(
-      string.split(wordSeparetorsRegExp).filter((word) => word),
+      string.split(wordSeparatorsRegExp).filter((word) => word),
     );
   }
 
   // 区切り文字のみの要素が連続している場合に、連続した区切り文字の要素を1つにまとめる
   // 入力: ["a", ".", ".", "b", "!", "?", "c"]
   // 期待値: ["a", "..", "b", "!?", "c"]
-  for (let i = 0; i < result.length - 1; i++) {
-    if (result[i].match(wordSeparetorsRegExp)) {
-      if (result[i + 1].match(wordSeparetorsRegExp)) {
-        result[i] = result[i] + result[i + 1];
-        result.splice(i + 1, 1);
-      }
-    }
-  }
+  result = combileConsecutiveElements(
+    result,
+    new RegExp(wordSeparatorsRegExp.source),
+  );
 
   return result;
 }
@@ -555,20 +551,28 @@ export function splitBySpace(strings: string[]) {
   }
 
   // スペースのみの要素が連続している場合に、連続したスペースの要素を1つにまとめる
-  // 入力: [" ", " ", "a", " ", " ", "b", " ", " ", "c", " "]
-  // 期待値: ["  ", "a", "  ", "b", "  ", "c", " "]
+  result = combileConsecutiveElements(result, /^([\s]+)$/);
 
-  const pattern = /^\s+$/g;
-  for (let i = 0; i < result.length - 1; i++) {
-    if (result[i].match(pattern)) {
-      if (result[i + 1].match(pattern)) {
-        result[i] = result[i] + result[i + 1];
-        result.splice(i + 1, 1);
+  return result;
+}
+
+/**
+ * 指定した条件に一致する要素を結合する
+ * @param strings 結合する文字列の配列
+ * @param pettern 結合する条件
+ * @returns 結合した文字列の配列
+ */
+export function combileConsecutiveElements(strings: string[], pettern: RegExp) {
+  for (let i = 0; i < strings.length - 1; i++) {
+    if (pettern.test(strings[i])) {
+      while (pettern.test(strings[i + 1])) {
+        strings[i] = strings[i] + strings[i + 1];
+        strings.splice(i + 1, 1);
       }
     }
   }
 
-  return result;
+  return strings;
 }
 
 /**
@@ -602,9 +606,24 @@ export function splitByWord(strings: string[]) {
  * @returns 分割した文字列の配列
  */
 export function splitByAll(strings: string[]) {
-  let result = splitByWordSeparetors(strings);
+  let result = splitByWordSeparators(strings);
   result = splitBySpace(result);
   result = splitByWord(result);
+
+  // SplitByWord()を実行した後に、記号が分割されてしまうので、記号をまとめる
+  // 入力: ["a", ".", ".", "b", "!", "?", "c"]
+  // 期待値: ["a", "..", "b", "!?", "c"]
+  const wordSeparators = getWordSeparators();
+  const wordSeparatorsRegExp = getWordSeparatorsRegExp(
+    escapeRegExp(wordSeparators),
+  );
+  console.log(wordSeparatorsRegExp.source);
+
+  result = combileConsecutiveElements(
+    result,
+    new RegExp(wordSeparatorsRegExp.source),
+  );
+
   return result;
 }
 

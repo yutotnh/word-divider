@@ -44,58 +44,80 @@ suite("Extension Test Suite", () => {
 
   test("splitBySpace", () => {
     // スペースで分割されるか確認する
-    assert.deepStrictEqual(
-      [" ", "a", " ", "b", " ", "c", " "],
-      extension.splitBySpace([" a b c "]),
-    );
+    assert.deepStrictEqual(extension.splitBySpace([" a b c "]), [
+      " ",
+      "a",
+      " ",
+      "b",
+      " ",
+      "c",
+      " ",
+    ]);
 
     // スペースで分割されるか確認する
-    assert.deepStrictEqual(
-      [" ", "a", "b", "c"],
-      extension.splitBySpace([" a", "b", "c"]),
-    );
+    assert.deepStrictEqual(extension.splitBySpace([" a", "b", "c"]), [
+      " ",
+      "a",
+      "b",
+      "c",
+    ]);
 
     // スペースで分割されるか確認する
-    assert.deepStrictEqual(
-      ["a", " ", "b", "c"],
-      extension.splitBySpace(["a ", "b", "c"]),
-    );
+    assert.deepStrictEqual(extension.splitBySpace(["a ", "b", "c"]), [
+      "a",
+      " ",
+      "b",
+      "c",
+    ]);
 
     // スペースで分割されるか確認する
-    assert.deepStrictEqual(
-      ["a", " ", "b", "c"],
-      extension.splitBySpace(["a", " b", "c"]),
-    );
+    assert.deepStrictEqual(extension.splitBySpace(["a", " b", "c"]), [
+      "a",
+      " ",
+      "b",
+      "c",
+    ]);
 
     // スペースで分割されるか確認する
-    assert.deepStrictEqual(
-      ["a", "b", " ", "c"],
-      extension.splitBySpace(["a", "b ", "c"]),
-    );
+    assert.deepStrictEqual(extension.splitBySpace(["a", "b ", "c"]), [
+      "a",
+      "b",
+      " ",
+      "c",
+    ]);
 
     // スペースで分割されるか確認する
-    assert.deepStrictEqual(
-      ["a", "b", " ", "c"],
-      extension.splitBySpace(["a", "b", " c"]),
-    );
+    assert.deepStrictEqual(extension.splitBySpace(["a", "b", " c"]), [
+      "a",
+      "b",
+      " ",
+      "c",
+    ]);
 
     // スペースで分割されるか確認する
-    assert.deepStrictEqual(
-      ["a", "b", "c", " "],
-      extension.splitBySpace(["a", "b", "c "]),
-    );
+    assert.deepStrictEqual(extension.splitBySpace(["a", "b", "c "]), [
+      "a",
+      "b",
+      "c",
+      " ",
+    ]);
 
     // スペースで分割されるか確認する
-    assert.deepStrictEqual(
-      ["a", " ", "b", " ", "c"],
-      extension.splitBySpace(["a", " b ", "c"]),
-    );
+    assert.deepStrictEqual(extension.splitBySpace(["a", " b ", "c"]), [
+      "a",
+      " ",
+      "b",
+      " ",
+      "c",
+    ]);
 
     // スペースで分割されるか確認する
-    assert.deepStrictEqual(
-      ["a", "   ", "b", "c"],
-      extension.splitBySpace(["a ", "  b", "c"]),
-    );
+    assert.deepStrictEqual(extension.splitBySpace(["a ", "  b", "c"]), [
+      "a",
+      "   ",
+      "b",
+      "c",
+    ]);
   });
 
   test("getWordSeparatorsRegExp", () => {
@@ -110,11 +132,31 @@ suite("Extension Test Suite", () => {
       new RegExp("([\\.\\*]+)", "g"),
       extension.getWordSeparatorsRegExp(".*"),
     );
+  });
 
-    // 生成した正規表現で文字列が分割されるか確認する
+  test("combileConsecutiveElements", () => {
+    // 連続した要素がまとめられることを確認する
     assert.deepStrictEqual(
-      ["a", ".", "b", ".", "c"],
-      "a.b.c".split(extension.getWordSeparatorsRegExp(".*")),
+      extension.combileConsecutiveElements([".", "|"], /[\\.|!]+/),
+      [".|"],
+    );
+
+    assert.deepStrictEqual(
+      extension.combileConsecutiveElements(["  ", " "], /^([\s]+)$/),
+      ["   "],
+    );
+
+    assert.deepStrictEqual(
+      extension.combileConsecutiveElements([".", "|", "!"], /[\\.|!]+/),
+      [".|!"],
+    );
+
+    assert.deepStrictEqual(
+      extension.combileConsecutiveElements(
+        ["a", ".", "|", "!", "b", "c"],
+        /[(\\.|!)]+/,
+      ),
+      ["a", ".|!", "b", "c"],
     );
   });
 
@@ -138,40 +180,53 @@ suite("Extension Test Suite", () => {
 
   // vscodeの設定を変更・取得するのは時間がかかりデフォルトのタイムアウト時間では間に合わない場合がある
   // そのため、確実にテストが完了するようにテストのタイムアウト時間を20sにする
-  test("splitByWordSeparetors", async () => {
+  test("splitByWordSeparators", async () => {
     // テストで用いる区切り文字を設定するためデフォルトのeditor.wordSeparatorsを設定する
     await setDefaultWordSeparators();
 
     // 区切り文字で分割されることを確認する
-    assert.deepStrictEqual(
-      ["a", ",", "b", "c"],
-      extension.splitByWordSeparetors(["a,", "b", "c"]),
-    );
+    assert.deepStrictEqual(extension.splitByWordSeparators(["a,", "b", "c"]), [
+      "a",
+      ",",
+      "b",
+      "c",
+    ]);
 
     // 区切り文字で分割されることを確認する
-    assert.deepStrictEqual(
-      [".", "a", "b", "c"],
-      extension.splitByWordSeparetors([".a", "b", "c"]),
-    );
+    assert.deepStrictEqual(extension.splitByWordSeparators([".a", "b", "c"]), [
+      ".",
+      "a",
+      "b",
+      "c",
+    ]);
+
+    // 区切り文字が連続しているときに一つの要素にまとめられることを確認する
+    assert.deepStrictEqual(extension.splitByWordSeparators(["a.", "|b", "c"]), [
+      "a",
+      ".|",
+      "b",
+      "c",
+    ]);
 
     // 区切り文字が連続しているときに一つの要素にまとめられることを確認する
     assert.deepStrictEqual(
-      ["a", ".|", "b", "c"],
-      extension.splitByWordSeparetors(["a.", "|b", "c"]),
+      extension.splitByWordSeparators(["a.", "|", ".b", "c"]),
+      ["a", ".|.", "b", "c"],
     );
   }).timeout("20s");
 
   test("splitByWord", () => {
     // 単語で分割されることを確認する
-    assert.deepStrictEqual(
-      ["単語", "で", "分割"],
-      extension.splitByWord(["単語で分割"]),
-    );
+    assert.deepStrictEqual(extension.splitByWord(["単語で分割"]), [
+      "単語",
+      "で",
+      "分割",
+    ]);
 
     // 複数の単語で分割されることを確認する
     assert.deepStrictEqual(
-      ["分かち書き", "は", "素晴らしい", "!"],
       extension.splitByWord(["分かち書きは", "素晴らしい!"]),
+      ["分かち書き", "は", "素晴らしい", "!"],
     );
 
     // 連結した英単語は分割されないことを確認する
@@ -183,16 +238,20 @@ suite("Extension Test Suite", () => {
 
   // vscodeの設定を変更・取得するのは時間がかかりデフォルトのタイムアウト時間では間に合わない場合がある
   // そのため、確実にテストが完了するようにテストのタイムアウト時間を20sにする
-  test("split", async () => {
+  test("splitByAll", async () => {
     // テストで用いる区切り文字を設定するためデフォルトのeditor.wordSeparatorsを設定する
     await setDefaultWordSeparators();
 
-    assert.deepStrictEqual(
-      ["a", " ", "b", " ", "c"],
-      extension.splitByAll(["a b c"]),
-    );
+    assert.deepStrictEqual(extension.splitByAll(["a b c"]), [
+      "a",
+      " ",
+      "b",
+      " ",
+      "c",
+    ]);
 
     assert.deepStrictEqual(
+      extension.splitByAll(["editor.wordSeparatorsで指定された文字で分割する"]),
       [
         "editor",
         ".",
@@ -207,8 +266,9 @@ suite("Extension Test Suite", () => {
         "分割",
         "する",
       ],
-      extension.splitByAll(["editor.wordSeparatorsで指定された文字で分割する"]),
     );
+
+    assert.deepStrictEqual(["  ", "});"], extension.splitByAll(["  });"]));
   }).timeout("20s");
 
   test("wordLeftPosition", () => {
@@ -269,107 +329,104 @@ suite("Extension Test Suite", () => {
     // テストで用いる区切り文字を設定するためデフォルトのeditor.wordSeparatorsを設定する
     await setDefaultWordSeparators();
 
-    assert.deepStrictEqual(
-      [
-        { segment: "abc", isWord: true },
-        { segment: " ", isWord: false },
-        { segment: "def", isWord: true },
-      ],
-      extension.stringToSegments(["abc", " ", "def"], 1),
-    );
+    assert.deepStrictEqual(extension.stringToSegments(["abc", " ", "def"], 1), [
+      { segment: "abc", isWord: true },
+      { segment: " ", isWord: false },
+      { segment: "def", isWord: true },
+    ]);
 
     assert.deepStrictEqual(
-      [
-        { segment: "abc", isWord: true },
-        { segment: "!", isWord: false },
-        { segment: "def", isWord: true },
-      ],
       extension.stringToSegments(
         ["abc", "!", "def"],
         extension.PURPOSE.selectLeft,
       ),
+      [
+        { segment: "abc", isWord: true },
+        { segment: "!", isWord: false },
+        { segment: "def", isWord: true },
+      ],
     );
 
     assert.deepStrictEqual(
+      extension.stringToSegments(
+        ["abc", "!", " ", "def"],
+        extension.PURPOSE.selectLeft,
+      ),
       [
         { segment: "abc", isWord: true },
         { segment: "!", isWord: false },
         { segment: " ", isWord: false },
         { segment: "def", isWord: true },
       ],
-      extension.stringToSegments(
-        ["abc", "!", " ", "def"],
-        extension.PURPOSE.selectLeft,
-      ),
     );
 
     assert.deepStrictEqual(
+      extension.stringToSegments(
+        ["abc", "!", " ", "def"],
+        extension.PURPOSE.selectRight,
+      ),
       [
         { segment: "abc", isWord: true },
         { segment: "!", isWord: true },
         { segment: " ", isWord: false },
         { segment: "def", isWord: true },
       ],
-      extension.stringToSegments(
-        ["abc", "!", " ", "def"],
-        extension.PURPOSE.selectRight,
-      ),
     );
 
     assert.deepStrictEqual(
-      [
-        { segment: "abc", isWord: true },
-        { segment: "!/", isWord: true },
-        { segment: " ", isWord: false },
-        { segment: "def", isWord: true },
-      ],
       extension.stringToSegments(
         ["abc", "!/", " ", "def"],
         extension.PURPOSE.selectLeft,
       ),
+      [
+        { segment: "abc", isWord: true },
+        { segment: "!/", isWord: true },
+        { segment: " ", isWord: false },
+        { segment: "def", isWord: true },
+      ],
     );
 
     assert.deepStrictEqual(
+      extension.stringToSegments(
+        ["abc", "!/", "def"],
+        extension.PURPOSE.selectRight,
+      ),
       [
         { segment: "abc", isWord: true },
         { segment: "!/", isWord: true },
         { segment: "def", isWord: true },
       ],
-      extension.stringToSegments(
-        ["abc", "!/", "def"],
-        extension.PURPOSE.selectRight,
-      ),
     );
 
     assert.deepStrictEqual(
-      [
-        { segment: "abc", isWord: true },
-        { segment: " ", isWord: false },
-        { segment: "!", isWord: true },
-        { segment: " ", isWord: false },
-        { segment: "def", isWord: true },
-      ],
       extension.stringToSegments(
         ["abc", " ", "!", " ", "def"],
         extension.PURPOSE.selectLeft,
       ),
+      [
+        { segment: "abc", isWord: true },
+        { segment: " ", isWord: false },
+        { segment: "!", isWord: true },
+        { segment: " ", isWord: false },
+        { segment: "def", isWord: true },
+      ],
     );
 
     assert.deepStrictEqual(
+      extension.stringToSegments(["abc", "!", "def"], extension.PURPOSE.delete),
       [
         { segment: "abc", isWord: true },
         { segment: "!", isWord: true },
         { segment: "def", isWord: true },
       ],
-      extension.stringToSegments(["abc", "!", "def"], extension.PURPOSE.delete),
     );
 
     assert.deepStrictEqual(
+      extension.stringToSegments(["-", "1"], extension.PURPOSE.selectLeft),
       [
         { segment: "-", isWord: false },
         { segment: "1", isWord: true },
       ],
-      extension.stringToSegments(["-", "1"], extension.PURPOSE.selectLeft),
     );
   });
 });
