@@ -578,12 +578,12 @@ export function splitBySpace(strings: string[]) {
  * @todo  Intl.Segmenterのlocaleを指定できるようにする
  */
 export function splitByWord(strings: string[]) {
-  const segmenterFr = new Intl.Segmenter("ja", { granularity: "word" });
+  const segmenter = new Intl.Segmenter("ja", { granularity: "word" });
 
   const result: string[] = [];
 
   for (const string of strings) {
-    const segments = segmenterFr.segment(string);
+    const segments = segmenter.segment(string);
 
     for (const segment of segments) {
       result.push(segment.segment);
