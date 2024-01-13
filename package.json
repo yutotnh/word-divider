@@ -21,7 +21,9 @@
   ],
   "activationEvents": [
     "onCommand:word-divider.cursorWordLeft",
-    "onCommand:word-divider.cursorWordEndRight"
+    "onCommand:word-divider.cursorWordEndRight",
+    "onCommand:word-divider.cursorWordLeftSelect",
+    "onCommand:word-divider.cursorWordEndRightSelect"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -34,6 +36,16 @@
       {
         "key": "ctrl+right",
         "command": "word-divider.cursorWordEndRight",
+        "when": "textInputFocus && !accessibilityModeEnabled"
+      },
+      {
+        "key": "ctrl+shift+left",
+        "command": "word-divider.cursorWordLeftSelect",
+        "when": "textInputFocus && !accessibilityModeEnabled"
+      },
+      {
+        "key": "ctrl+shift+right",
+        "command": "word-divider.cursorWordEndRightSelect",
         "when": "textInputFocus && !accessibilityModeEnabled"
       }
     ]
