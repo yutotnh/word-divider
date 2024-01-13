@@ -410,8 +410,9 @@ type Purpose = (typeof PURPOSE)[keyof typeof PURPOSE];
  * 文字列をSegmentに変換する
  * - 空白文字はisWord=false
  * - editor.wordSeparators中の1文字からなる要素はisWord=false
- *   - ただし、isRight=true の時は前が空白文字の場合はisWord=true
- *   - ただし、isRight=falseの時は後が空白文字の場合はisWord=true
+ *   - ただし、purpose=PURPOSE.selectRightの時は後が空白文字の場合はisWord=true
+ *   - ただし、purpose=PURPOSE.selectLeft の時は前が空白文字の場合はisWord=true
+ *   - ただし、purpose=PURPOSE.delete     の時はisWord=true
  * - それ以外はisWord=true
  * @param strings
  * @returns Segmentの配列
@@ -445,16 +446,16 @@ export function stringToSegments(strings: string[], purpose: Purpose) {
     }
 
     if (
-      purpose === PURPOSE.selectLeft &&
-      0 < i &&
-      spaceOnlyRegExp.test(strings[i - 1])
+      purpose === PURPOSE.selectRight &&
+      i < strings.length - 1 &&
+      spaceOnlyRegExp.test(strings[i + 1])
     ) {
       result.push({ segment: string, isWord: true });
       continue;
     } else if (
-      purpose === PURPOSE.selectRight &&
-      i < strings.length - 1 &&
-      spaceOnlyRegExp.test(strings[i + 1])
+      purpose === PURPOSE.selectLeft &&
+      0 < i &&
+      spaceOnlyRegExp.test(strings[i - 1])
     ) {
       result.push({ segment: string, isWord: true });
       continue;
