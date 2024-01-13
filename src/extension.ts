@@ -32,7 +32,10 @@ export function activate(context: vscode.ExtensionContext) {
         const line = position.line;
         const lineText = editor.document.lineAt(line).text;
 
-        const segments = stringToSegments(splitByAll([lineText]), false);
+        const segments = stringToSegments(
+          splitByAll([lineText]),
+          Purpose.SelectLeft,
+        );
 
         const wordLeftPos = wordLeftPosition(segments, position.character);
 
@@ -43,7 +46,10 @@ export function activate(context: vscode.ExtensionContext) {
             const previousLine = line - 1;
             const lineText = editor.document.lineAt(previousLine).text;
 
-            const segments = stringToSegments(splitByAll([lineText]), false);
+            const segments = stringToSegments(
+              splitByAll([lineText]),
+              Purpose.SelectLeft,
+            );
 
             let wordLeftPos = wordLeftPosition(segments, lineText.length);
 
@@ -83,7 +89,10 @@ export function activate(context: vscode.ExtensionContext) {
         const line = position.line;
         const lineText = editor.document.lineAt(line).text;
 
-        const segments = stringToSegments(splitByAll([lineText]), true);
+        const segments = stringToSegments(
+          splitByAll([lineText]),
+          Purpose.SelectRight,
+        );
 
         const wordEndRightPos = wordEndRightPosition(
           segments,
@@ -97,7 +106,10 @@ export function activate(context: vscode.ExtensionContext) {
             const nextLine = line + 1;
             const lineText = editor.document.lineAt(nextLine).text;
 
-            const segments = stringToSegments(splitByAll([lineText]), true);
+            const segments = stringToSegments(
+              splitByAll([lineText]),
+              Purpose.SelectRight,
+            );
 
             let wordEndRightPos = wordEndRightPosition(segments, 0);
 
@@ -137,7 +149,10 @@ export function activate(context: vscode.ExtensionContext) {
         const line = position.line;
         const lineText = editor.document.lineAt(line).text;
 
-        const segments = stringToSegments(splitByAll([lineText]), false);
+        const segments = stringToSegments(
+          splitByAll([lineText]),
+          Purpose.SelectLeft,
+        );
 
         const wordLeftPos = wordLeftPosition(segments, position.character);
 
@@ -148,7 +163,10 @@ export function activate(context: vscode.ExtensionContext) {
             const previousLine = line - 1;
             const lineText = editor.document.lineAt(previousLine).text;
 
-            const segments = stringToSegments(splitByAll([lineText]), false);
+            const segments = stringToSegments(
+              splitByAll([lineText]),
+              Purpose.SelectLeft,
+            );
 
             let wordLeftPos = wordLeftPosition(segments, lineText.length);
 
@@ -196,7 +214,10 @@ export function activate(context: vscode.ExtensionContext) {
           const line = position.line;
           const lineText = editor.document.lineAt(line).text;
 
-          const segments = stringToSegments(splitByAll([lineText]), true);
+          const segments = stringToSegments(
+            splitByAll([lineText]),
+            Purpose.SelectRight,
+          );
 
           const wordEndRightPos = wordEndRightPosition(
             segments,
@@ -210,7 +231,10 @@ export function activate(context: vscode.ExtensionContext) {
               const nextLine = line + 1;
               const lineText = editor.document.lineAt(nextLine).text;
 
-              const segments = stringToSegments(splitByAll([lineText]), true);
+              const segments = stringToSegments(
+                splitByAll([lineText]),
+                Purpose.SelectRight,
+              );
 
               let wordEndRightPos = wordEndRightPosition(segments, 0);
 
@@ -245,6 +269,76 @@ export function activate(context: vscode.ExtensionContext) {
         });
       },
     ),
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand("word-divider.deleteWordLeft", () => {
+      const editor = vscode.window.activeTextEditor;
+      if (!editor) {
+        return;
+      }
+
+      editor.selections.map((selection) => {
+        const position = selection.active;
+
+        if (selection.anchor.compareTo(selection.active)) {
+          // 選択されている場合は、選択範囲を削除する
+          editor.edit((editBuilder) => {
+            editBuilder.delete(selection);
+          });
+          return;
+        }
+
+        const line = position.line;
+        const lineText = editor.document.lineAt(line).text;
+
+        const segments = stringToSegments(
+          splitByAll([lineText]),
+          Purpose.Delete,
+        );
+
+        const wordLeftPos = wordLeftPosition(segments, position.character);
+
+        if (wordLeftPos === -1) {
+          if (line === 0) {
+            return;
+          } else {
+            const previousLine = line - 1;
+            const lineText = editor.document.lineAt(previousLine).text;
+
+            const newPosition = new vscode.Position(
+              previousLine,
+              lineText.length,
+            );
+
+            const newSelection = new vscode.Selection(
+              selection.anchor,
+              newPosition,
+            );
+
+            editor.edit((editBuilder) => {
+              editBuilder.delete(newSelection);
+            });
+
+            return;
+          }
+        }
+
+        const newPosition = position.with({
+          character: wordLeftPos,
+        });
+
+        const newSelection = new vscode.Selection(
+          selection.anchor,
+          newPosition,
+        );
+
+        editor.edit((editBuilder) => {
+          editBuilder.delete(newSelection);
+        });
+        return;
+      });
+    }),
   );
 }
 
@@ -316,6 +410,13 @@ interface Segment {
   isWord: boolean;
 }
 
+export const Purpose = {
+  SelectRight: 0,
+  SelectLeft: 1,
+  Delete: 2,
+} as const;
+type Purpose = (typeof Purpose)[keyof typeof Purpose];
+
 /**
  * 文字列をSegmentに変換する
  * - 空白文字はisWord=false
@@ -326,7 +427,7 @@ interface Segment {
  * @param strings
  * @returns Segmentの配列
  */
-export function stringToSegments(strings: string[], isRight: boolean) {
+export function stringToSegments(strings: string[], purpose: Purpose) {
   const result: Segment[] = [];
 
   const wordSeparators = getWordSeparators();
@@ -352,14 +453,21 @@ export function stringToSegments(strings: string[], isRight: boolean) {
       continue;
     }
 
-    if (!isRight && 0 < i && strings[i - 1].match(/^\s+$/g)) {
+    if (
+      purpose === Purpose.SelectLeft &&
+      0 < i &&
+      strings[i - 1].match(/^\s+$/g)
+    ) {
       result.push({ segment: string, isWord: true });
       continue;
     } else if (
-      isRight &&
+      purpose === Purpose.SelectRight &&
       i < strings.length - 1 &&
       strings[i + 1].match(/^\s+$/g)
     ) {
+      result.push({ segment: string, isWord: true });
+      continue;
+    } else if (purpose === Purpose.Delete) {
       result.push({ segment: string, isWord: true });
       continue;
     } else {

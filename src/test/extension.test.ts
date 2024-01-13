@@ -277,7 +277,19 @@ suite("Extension Test Suite", () => {
         { segment: " ", isWord: false },
         { segment: "def", isWord: true },
       ],
-      extension.stringToSegments(["abc", " ", "def"], false),
+      extension.stringToSegments(["abc", " ", "def"], 1),
+    );
+
+    assert.deepStrictEqual(
+      [
+        { segment: "abc", isWord: true },
+        { segment: "!", isWord: false },
+        { segment: "def", isWord: true },
+      ],
+      extension.stringToSegments(
+        ["abc", "!", "def"],
+        extension.Purpose.SelectLeft,
+      ),
     );
 
     assert.deepStrictEqual(
@@ -287,7 +299,10 @@ suite("Extension Test Suite", () => {
         { segment: " ", isWord: false },
         { segment: "def", isWord: true },
       ],
-      extension.stringToSegments(["abc", "!", " ", "def"], false),
+      extension.stringToSegments(
+        ["abc", "!", " ", "def"],
+        extension.Purpose.SelectLeft,
+      ),
     );
 
     assert.deepStrictEqual(
@@ -297,7 +312,10 @@ suite("Extension Test Suite", () => {
         { segment: " ", isWord: false },
         { segment: "def", isWord: true },
       ],
-      extension.stringToSegments(["abc", "!", " ", "def"], true),
+      extension.stringToSegments(
+        ["abc", "!", " ", "def"],
+        extension.Purpose.SelectRight,
+      ),
     );
 
     assert.deepStrictEqual(
@@ -307,7 +325,10 @@ suite("Extension Test Suite", () => {
         { segment: " ", isWord: false },
         { segment: "def", isWord: true },
       ],
-      extension.stringToSegments(["abc", "!/", " ", "def"], false),
+      extension.stringToSegments(
+        ["abc", "!/", " ", "def"],
+        extension.Purpose.SelectLeft,
+      ),
     );
 
     assert.deepStrictEqual(
@@ -316,7 +337,10 @@ suite("Extension Test Suite", () => {
         { segment: "!/", isWord: true },
         { segment: "def", isWord: true },
       ],
-      extension.stringToSegments(["abc", "!/", "def"], true),
+      extension.stringToSegments(
+        ["abc", "!/", "def"],
+        extension.Purpose.SelectRight,
+      ),
     );
 
     assert.deepStrictEqual(
@@ -327,7 +351,19 @@ suite("Extension Test Suite", () => {
         { segment: " ", isWord: false },
         { segment: "def", isWord: true },
       ],
-      extension.stringToSegments(["abc", " ", "!", " ", "def"], false),
+      extension.stringToSegments(
+        ["abc", " ", "!", " ", "def"],
+        extension.Purpose.SelectLeft,
+      ),
+    );
+
+    assert.deepStrictEqual(
+      [
+        { segment: "abc", isWord: true },
+        { segment: "!", isWord: true },
+        { segment: "def", isWord: true },
+      ],
+      extension.stringToSegments(["abc", "!", "def"], extension.Purpose.Delete),
     );
   });
 });

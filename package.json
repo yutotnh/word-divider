@@ -23,7 +23,8 @@
     "onCommand:word-divider.cursorWordLeft",
     "onCommand:word-divider.cursorWordEndRight",
     "onCommand:word-divider.cursorWordLeftSelect",
-    "onCommand:word-divider.cursorWordEndRightSelect"
+    "onCommand:word-divider.cursorWordEndRightSelect",
+    "onCommand:word-divider.deleteWordLeft"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -47,6 +48,11 @@
         "key": "ctrl+shift+right",
         "command": "word-divider.cursorWordEndRightSelect",
         "when": "textInputFocus && !accessibilityModeEnabled"
+      },
+      {
+        "key": "ctrl+backspace",
+        "command": "word-divider.deleteWordLeft",
+        "when": "textInputFocus && !editorReadonly"
       }
     ]
   },
