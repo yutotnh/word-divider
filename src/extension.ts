@@ -424,10 +424,12 @@ export function stringToSegments(strings: string[], purpose: Purpose) {
     escapeRegExp(wordSeparators),
   );
 
+  const spaceOnlyRegExp = /^([\s]+)$/;
+
   for (let i = 0; i < strings.length; i++) {
     const string = strings[i];
 
-    if (string.match(/^\s+$/g)) {
+    if (spaceOnlyRegExp.test(string)) {
       result.push({ segment: string, isWord: false });
       continue;
     }
@@ -445,14 +447,14 @@ export function stringToSegments(strings: string[], purpose: Purpose) {
     if (
       purpose === PURPOSE.selectLeft &&
       0 < i &&
-      strings[i - 1].match(/^\s+$/g)
+      spaceOnlyRegExp.test(strings[i - 1])
     ) {
       result.push({ segment: string, isWord: true });
       continue;
     } else if (
       purpose === PURPOSE.selectRight &&
       i < strings.length - 1 &&
-      strings[i + 1].match(/^\s+$/g)
+      spaceOnlyRegExp.test(strings[i + 1])
     ) {
       result.push({ segment: string, isWord: true });
       continue;
