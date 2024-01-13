@@ -460,6 +460,7 @@ type Purpose = (typeof PURPOSE)[keyof typeof PURPOSE];
 /**
  * 文字列をSegmentに変換する
  * - 空白文字はisWord=false
+ *   - だたし、purpose=PURPOSE.delete     の時は空白文字が2つ以上の場合はisWord=true
  * - editor.wordSeparators中の1文字からなる要素はisWord=false
  *   - ただし、purpose=PURPOSE.selectRightの時は後が空白文字の場合はisWord=true
  *   - ただし、purpose=PURPOSE.selectLeft の時は前が空白文字の場合はisWord=true
@@ -482,6 +483,10 @@ export function stringToSegments(strings: string[], purpose: Purpose) {
     const string = strings[i];
 
     if (spaceOnlyRegExp.test(string)) {
+      if (1 < string.length && purpose === PURPOSE.delete) {
+        result.push({ segment: string, isWord: true });
+        continue;
+      }
       result.push({ segment: string, isWord: false });
       continue;
     }
