@@ -27,9 +27,6 @@ export function activate(context: vscode.ExtensionContext) {
       "word-divider.cursorWordEndRightSelect",
       cursorWordEndRightSelect,
     ),
-  );
-
-  context.subscriptions.push(
     vscode.commands.registerCommand(
       "word-divider.deleteWordLeft",
       deleteWordLeft,
