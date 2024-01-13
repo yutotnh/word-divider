@@ -611,7 +611,6 @@ export function splitByAll(strings: string[]) {
   const wordSeparatorsRegExp = getWordSeparatorsRegExp(
     escapeRegExp(wordSeparators),
   );
-  console.log(wordSeparatorsRegExp.source);
 
   result = combileConsecutiveElements(
     result,
