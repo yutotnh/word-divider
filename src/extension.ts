@@ -31,6 +31,10 @@ export function activate(context: vscode.ExtensionContext) {
       "word-divider.deleteWordLeft",
       deleteWordLeft,
     ),
+    vscode.commands.registerCommand(
+      "word-divider.deleteWordRight",
+      deleteWordRight,
+    ),
   );
 }
 
@@ -283,6 +287,65 @@ export function deleteWordLeft() {
     const segments = stringToSegments(splitByAll([lineText]), PURPOSE.delete);
 
     const character = wordLeftCharacter(segments, position.character);
+
+    if (character === -1) {
+      if (line === 0) {
+        return;
+      } else {
+        const previousLine = line - 1;
+        const lineText = editor.document.lineAt(previousLine).text;
+
+        const newPosition = new vscode.Position(previousLine, lineText.length);
+
+        const newSelection = new vscode.Selection(
+          selection.anchor,
+          newPosition,
+        );
+
+        editor.edit((editBuilder) => {
+          editBuilder.delete(newSelection);
+        });
+
+        return;
+      }
+    }
+
+    const newPosition = position.with({
+      character: character,
+    });
+
+    const newSelection = new vscode.Selection(selection.anchor, newPosition);
+
+    editor.edit((editBuilder) => {
+      editBuilder.delete(newSelection);
+    });
+    return;
+  });
+}
+
+export function deleteWordRight() {
+  const editor = vscode.window.activeTextEditor;
+  if (!editor) {
+    return;
+  }
+
+  editor.selections.map((selection) => {
+    const position = selection.active;
+
+    if (selection.anchor.compareTo(selection.active)) {
+      // 選択されている場合は、選択範囲を削除する
+      editor.edit((editBuilder) => {
+        editBuilder.delete(selection);
+      });
+      return;
+    }
+
+    const line = position.line;
+    const lineText = editor.document.lineAt(line).text;
+
+    const segments = stringToSegments(splitByAll([lineText]), PURPOSE.delete);
+
+    const character = wordEndRightCharacter(segments, position.character);
 
     if (character === -1) {
       if (line === 0) {

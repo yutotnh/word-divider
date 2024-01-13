@@ -24,7 +24,8 @@
     "onCommand:word-divider.cursorWordEndRight",
     "onCommand:word-divider.cursorWordLeftSelect",
     "onCommand:word-divider.cursorWordEndRightSelect",
-    "onCommand:word-divider.deleteWordLeft"
+    "onCommand:word-divider.deleteWordLeft",
+    "onCommand:word-divider.deleteWordRight"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -52,6 +53,11 @@
       {
         "key": "ctrl+backspace",
         "command": "word-divider.deleteWordLeft",
+        "when": "textInputFocus && !editorReadonly"
+      },
+      {
+        "key": "ctrl+delete",
+        "command": "word-divider.deleteWordRight",
         "when": "textInputFocus && !editorReadonly"
       }
     ]
