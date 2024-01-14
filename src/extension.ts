@@ -45,7 +45,7 @@ export function cursorWordLeft() {
   const editor = vscode.window.activeTextEditor;
   if (!editor) {
     logOutputChannel.warn(
-      "Could not get active text editor. I cannot move the cursor.",
+      "Could not get active text editor. Cannot move the cursor.",
     );
     return;
   }
@@ -53,11 +53,6 @@ export function cursorWordLeft() {
   editor.selections = editor.selections.map((selection) => {
     const position = selection.active;
     let line = position.line;
-
-    if (line === 0 && position.character === 0) {
-      // 1行目の先頭の場合は何もしない
-      return selection;
-    }
 
     const lineText = editor.document.lineAt(line).text;
 
@@ -68,6 +63,11 @@ export function cursorWordLeft() {
 
     // 単語の先頭の位置がない場合は、前の行の最後単語の始めに移動する
     if (character === -1) {
+      if (line === 0) {
+        // 1行目の場合はその前には単語がないので何もしない
+        return selection;
+      }
+
       line -= 1;
       const lineText = editor.document.lineAt(line).text;
 
@@ -95,57 +95,44 @@ export function cursorWordEndRight() {
   const editor = vscode.window.activeTextEditor;
   if (!editor) {
     logOutputChannel.warn(
-      "Could not get active text editor. I cannot move the cursor.",
+      "Could not get active text editor. Cannot move the cursor.",
     );
     return;
   }
 
   editor.selections = editor.selections.map((selection) => {
     const position = selection.active;
-
-    const line = position.line;
+    let line = position.line;
     const lineText = editor.document.lineAt(line).text;
 
-    const segments = stringToSegments(
-      splitByAll([lineText]),
-      PURPOSE.selectRight,
+    let character = wordEndRightCharacter(
+      stringToSegments(splitByAll([lineText]), PURPOSE.selectRight),
+      position.character,
     );
-
-    const character = wordEndRightCharacter(segments, position.character);
 
     if (character === -1) {
       if (line === editor.document.lineCount - 1) {
+        // 最終行の行末の場合は何もしない
         return selection;
-      } else {
-        const nextLine = line + 1;
-        const lineText = editor.document.lineAt(nextLine).text;
+      }
 
-        const segments = stringToSegments(
-          splitByAll([lineText]),
-          PURPOSE.selectRight,
-        );
+      line += 1;
+      const lineText = editor.document.lineAt(line).text;
 
-        let character = wordEndRightCharacter(segments, 0);
+      character = wordEndRightCharacter(
+        stringToSegments(splitByAll([lineText]), PURPOSE.selectRight),
+        0,
+      );
 
-        if (character === -1) {
-          character = lineText.length;
-        }
-
-        const newPosition = new vscode.Position(nextLine, character);
-
-        const newSelection = new vscode.Selection(newPosition, newPosition);
-
-        return newSelection;
+      // 次の行に単語がない場合は、次の行の行末に移動する
+      if (character === -1) {
+        character = lineText.length;
       }
     }
 
-    const newPosition = position.with({
-      character: character,
-    });
+    const newPosition = new vscode.Position(line, character);
 
-    const newSelection = new vscode.Selection(newPosition, newPosition);
-
-    return newSelection;
+    return new vscode.Selection(newPosition, newPosition);
   });
 }
 
@@ -155,58 +142,45 @@ export function cursorWordEndRight() {
 export function cursorWordLeftSelect() {
   const editor = vscode.window.activeTextEditor;
   if (!editor) {
+    logOutputChannel.warn("Could not get active text editor. Cannot select");
     return;
   }
 
   editor.selections = editor.selections.map((selection) => {
     const position = selection.active;
+    let line = position.line;
 
-    const line = position.line;
     const lineText = editor.document.lineAt(line).text;
 
-    const segments = stringToSegments(
-      splitByAll([lineText]),
-      PURPOSE.selectLeft,
+    let character = wordLeftCharacter(
+      stringToSegments(splitByAll([lineText]), PURPOSE.selectLeft),
+      position.character,
     );
 
-    const character = wordLeftCharacter(segments, position.character);
-
+    // 単語の先頭の位置がない場合は、前の行の最後単語の始めに移動する
     if (character === -1) {
       if (line === 0) {
+        // 1行目の場合はその前には単語がないので何もしない
         return selection;
-      } else {
-        const previousLine = line - 1;
-        const lineText = editor.document.lineAt(previousLine).text;
+      }
 
-        const segments = stringToSegments(
-          splitByAll([lineText]),
-          PURPOSE.selectLeft,
-        );
+      line -= 1;
+      const lineText = editor.document.lineAt(line).text;
 
-        let wordLeftPos = wordLeftCharacter(segments, lineText.length);
+      character = wordLeftCharacter(
+        stringToSegments(splitByAll([lineText]), PURPOSE.selectLeft),
+        lineText.length,
+      );
 
-        if (wordLeftPos === -1) {
-          wordLeftPos = 0;
-        }
-
-        const newPosition = new vscode.Position(previousLine, wordLeftPos);
-
-        const newSelection = new vscode.Selection(
-          selection.anchor,
-          newPosition,
-        );
-
-        return newSelection;
+      // 前の行に単語がない場合は、前の行の先頭に移動する
+      if (character === -1) {
+        character = 0;
       }
     }
 
-    const newPosition = position.with({
-      character: character,
-    });
+    const newPosition = new vscode.Position(line, character);
 
-    const newSelection = new vscode.Selection(selection.anchor, newPosition);
-
-    return newSelection;
+    return new vscode.Selection(selection.anchor, newPosition);
   });
 }
 
@@ -216,58 +190,43 @@ export function cursorWordLeftSelect() {
 export function cursorWordEndRightSelect() {
   const editor = vscode.window.activeTextEditor;
   if (!editor) {
+    logOutputChannel.warn("Could not get active text editor. Cannot select");
     return;
   }
 
   editor.selections = editor.selections.map((selection) => {
     const position = selection.active;
-
-    const line = position.line;
+    let line = position.line;
     const lineText = editor.document.lineAt(line).text;
 
-    const segments = stringToSegments(
-      splitByAll([lineText]),
-      PURPOSE.selectRight,
+    let character = wordEndRightCharacter(
+      stringToSegments(splitByAll([lineText]), PURPOSE.selectRight),
+      position.character,
     );
-
-    const character = wordEndRightCharacter(segments, position.character);
 
     if (character === -1) {
       if (line === editor.document.lineCount - 1) {
+        // 最終行の行末の場合は何もしない
         return selection;
-      } else {
-        const nextLine = line + 1;
-        const lineText = editor.document.lineAt(nextLine).text;
+      }
 
-        const segments = stringToSegments(
-          splitByAll([lineText]),
-          PURPOSE.selectRight,
-        );
+      line += 1;
+      const lineText = editor.document.lineAt(line).text;
 
-        let character = wordEndRightCharacter(segments, 0);
+      character = wordEndRightCharacter(
+        stringToSegments(splitByAll([lineText]), PURPOSE.selectRight),
+        0,
+      );
 
-        if (character === -1) {
-          character = lineText.length;
-        }
-
-        const newPosition = new vscode.Position(nextLine, character);
-
-        const newSelection = new vscode.Selection(
-          selection.anchor,
-          newPosition,
-        );
-
-        return newSelection;
+      // 次の行に単語がない場合は、次の行の行末に移動する
+      if (character === -1) {
+        character = lineText.length;
       }
     }
 
-    const newPosition = position.with({
-      character: character,
-    });
+    const newPosition = new vscode.Position(line, character);
 
-    const newSelection = new vscode.Selection(selection.anchor, newPosition);
-
-    return newSelection;
+    return new vscode.Selection(selection.anchor, newPosition);
   });
 }
 
@@ -277,59 +236,48 @@ export function cursorWordEndRightSelect() {
 export function deleteWordLeft() {
   const editor = vscode.window.activeTextEditor;
   if (!editor) {
+    logOutputChannel.warn("Could not get active text editor. Cannot delete.");
     return;
   }
 
   const selections = editor.selections.map((selection) => {
-    const position = selection.active;
-
     if (selection.anchor.compareTo(selection.active) !== 0) {
       // 選択されている場合は、選択範囲を削除する
       return selection;
     }
 
-    const line = position.line;
+    const position = selection.active;
+    let line = position.line;
+
     const lineText = editor.document.lineAt(line).text;
 
-    const segments = stringToSegments(splitByAll([lineText]), PURPOSE.delete);
+    let character = wordLeftCharacter(
+      stringToSegments(splitByAll([lineText]), PURPOSE.delete),
+      position.character,
+    );
 
-    const character = wordLeftCharacter(segments, position.character);
-
+    // 単語の先頭の位置がない場合は、前の行の最後単語の始めに移動する
     if (character === -1) {
       if (line === 0) {
-        // 1行目の先頭の場合は何もしない
+        // 1行目の場合はその前には単語がないので何もしない
         return new vscode.Selection(selection.anchor, selection.anchor);
       } else {
-        const previousLine = line - 1;
-        const lineText = editor.document.lineAt(previousLine).text;
-
-        const newPosition = new vscode.Position(previousLine, lineText.length);
-
-        const newSelection = new vscode.Selection(
-          selection.anchor,
-          newPosition,
-        );
-
-        return newSelection;
+        line -= 1;
+        const lineText = editor.document.lineAt(line).text;
+        character = lineText.length;
       }
     }
 
-    const newPosition = position.with({
-      character: character,
-    });
+    const newPosition = new vscode.Position(line, character);
 
-    const newSelection = new vscode.Selection(selection.anchor, newPosition);
-
-    return newSelection;
+    return new vscode.Selection(selection.anchor, newPosition);
   });
 
   // 選択範囲を削除する
   // editor.edit()の中でselectionをループさせないと、最初のselectionのみが削除される
   editor.edit((editBuilder) => {
     selections.forEach((selection) => {
-      if (selection) {
-        editBuilder.delete(selection);
-      }
+      editBuilder.delete(selection);
     });
   });
 }
@@ -340,59 +288,51 @@ export function deleteWordLeft() {
 export function deleteWordRight() {
   const editor = vscode.window.activeTextEditor;
   if (!editor) {
+    logOutputChannel.warn("Could not get active text editor. Cannot delete.");
     return;
   }
 
   const selections = editor.selections.map((selection) => {
-    const position = selection.active;
-
     if (selection.anchor.compareTo(selection.active) !== 0) {
       // 選択されている場合は、選択範囲を削除する
       return selection;
     }
 
-    const line = position.line;
+    const position = selection.active;
+    let line = position.line;
+
     const lineText = editor.document.lineAt(line).text;
 
-    const segments = stringToSegments(splitByAll([lineText]), PURPOSE.delete);
+    let character = wordEndRightCharacter(
+      stringToSegments(splitByAll([lineText]), PURPOSE.delete),
+      position.character,
+    );
 
-    const character = wordEndRightCharacter(segments, position.character);
-
+    // 単語の先頭の位置がない場合は、前の行の最後単語の始めに移動する
     if (character === -1) {
-      if (line === 0) {
-        // 1行目の先頭の場合は何もしない
-        return new vscode.Selection(selection.anchor, selection.anchor);
-      } else {
-        const previousLine = line - 1;
-        const lineText = editor.document.lineAt(previousLine).text;
-
-        const newPosition = new vscode.Position(previousLine, lineText.length);
-
-        const newSelection = new vscode.Selection(
-          selection.anchor,
-          newPosition,
-        );
-
-        return newSelection;
+      if (line === editor.document.lineCount - 1) {
+        // 最終行の行末の場合は何もしない
+        return new vscode.Selection(selection.active, selection.active);
       }
+
+      line += 1;
+      const lineText = editor.document.lineAt(line).text;
+      character = wordEndRightCharacter(
+        stringToSegments(splitByAll([lineText]), PURPOSE.delete),
+        0,
+      );
     }
 
-    const newPosition = position.with({
-      character: character,
-    });
+    const newPosition = new vscode.Position(line, character);
 
-    const newSelection = new vscode.Selection(selection.anchor, newPosition);
-
-    return newSelection;
+    return new vscode.Selection(selection.anchor, newPosition);
   });
 
   // 選択範囲を削除する
   // editor.edit()の中でselectionをループさせないと、最初のselectionのみが削除される
   editor.edit((editBuilder) => {
     selections.forEach((selection) => {
-      if (selection) {
-        editBuilder.delete(selection);
-      }
+      editBuilder.delete(selection);
     });
   });
 }
