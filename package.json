@@ -1,7 +1,7 @@
 {
   "name": "word-divider",
   "displayName": "Word Divider",
-  "description": "Word Divider",
+  "description": "Enable cursor movement in Japanese sentences on a word-by-word basis",
   "version": "0.0.1",
   "publisher": "yutotnh",
   "license": "SEE LICENSE IN LICENSE",
@@ -31,33 +31,39 @@
   "contributes": {
     "keybindings": [
       {
-        "key": "ctrl+left",
         "command": "word-divider.cursorWordLeft",
+        "key": "ctrl+left",
+        "mac": "alt+left",
         "when": "textInputFocus && !accessibilityModeEnabled"
       },
       {
-        "key": "ctrl+right",
         "command": "word-divider.cursorWordEndRight",
+        "key": "ctrl+right",
+        "mac": "alt+right",
         "when": "textInputFocus && !accessibilityModeEnabled"
       },
       {
-        "key": "ctrl+shift+left",
         "command": "word-divider.cursorWordLeftSelect",
+        "key": "ctrl+shift+left",
+        "mac": "shift+alt+left",
         "when": "textInputFocus && !accessibilityModeEnabled"
       },
       {
-        "key": "ctrl+shift+right",
         "command": "word-divider.cursorWordEndRightSelect",
+        "key": "ctrl+shift+right",
+        "mac": "shift+alt+right",
         "when": "textInputFocus && !accessibilityModeEnabled"
       },
       {
-        "key": "ctrl+backspace",
         "command": "word-divider.deleteWordLeft",
+        "key": "ctrl+backspace",
+        "mac": "option+backspace",
         "when": "textInputFocus && !editorReadonly"
       },
       {
-        "key": "ctrl+delete",
         "command": "word-divider.deleteWordRight",
+        "key": "ctrl+delete",
+        "mac": "alt+delete",
         "when": "textInputFocus && !editorReadonly"
       }
     ]
