@@ -3,7 +3,6 @@ on:
   release:
     types:
       - published
-  push:
 
 permissions:
   contents: write
@@ -22,14 +21,13 @@ jobs:
         with:
           node-version: 18.x
       - run: yarn install
-      # 動作確認中のため、一旦コメントアウト
-      # - name: Publish
-      #   run: yarn vscode:publish
-      #   env:
-      #     VSCE_PAT: ${{ secrets.VSCE_PAT }}
-      # - name: Create package
-      #   run: yarn vsce package
-      # - name: Release
-      #   uses: softprops/action-gh-release@v1
-      #   with:
-      #     files: wave-dash-unify-*.vsix
+      - name: Publish
+        run: yarn vscode:publish
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+      - name: Create package
+        run: yarn vsce package
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: wave-dash-unify-*.vsix
