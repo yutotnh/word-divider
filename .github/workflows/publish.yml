@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   test:
-    uses: "${{ github.repository }}/.github/workflows/test.yml"
+    uses: ./.github/workflows/test.yml
   publish:
     needs: test
     runs-on: ubuntu-latest
