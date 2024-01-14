@@ -24,3 +24,11 @@ jobs:
       - run: yarn install
       - name: lint
         run: yarn lint
+  actionlint:
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: reviewdog/action-actionlint@v1
