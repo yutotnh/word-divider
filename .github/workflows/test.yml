@@ -1,20 +1,14 @@
 name: "Test"
 on:
   push:
-    branches:
-      - main
   pull_request:
-    branches:
-      - "main"
-  release:
-    types:
-      - created
+  workflow_call:
 
 permissions:
   contents: write
 
 jobs:
-  build:
+  test:
     strategy:
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
