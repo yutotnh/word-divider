@@ -270,15 +270,12 @@ export function deleteWordLeft() {
     return;
   }
 
-  editor.selections.map((selection) => {
+  const selections = editor.selections.map((selection) => {
     const position = selection.active;
 
-    if (selection.anchor.compareTo(selection.active)) {
+    if (selection.anchor.compareTo(selection.active) !== 0) {
       // 選択されている場合は、選択範囲を削除する
-      editor.edit((editBuilder) => {
-        editBuilder.delete(selection);
-      });
-      return;
+      return selection;
     }
 
     const line = position.line;
@@ -290,7 +287,8 @@ export function deleteWordLeft() {
 
     if (character === -1) {
       if (line === 0) {
-        return;
+        // 1行目の先頭の場合は何もしない
+        return new vscode.Selection(selection.anchor, selection.anchor);
       } else {
         const previousLine = line - 1;
         const lineText = editor.document.lineAt(previousLine).text;
@@ -302,11 +300,7 @@ export function deleteWordLeft() {
           newPosition,
         );
 
-        editor.edit((editBuilder) => {
-          editBuilder.delete(newSelection);
-        });
-
-        return;
+        return newSelection;
       }
     }
 
@@ -316,10 +310,17 @@ export function deleteWordLeft() {
 
     const newSelection = new vscode.Selection(selection.anchor, newPosition);
 
-    editor.edit((editBuilder) => {
-      editBuilder.delete(newSelection);
+    return newSelection;
+  });
+
+  // 選択範囲を削除する
+  // editor.edit()の中でselectionをループさせないと、最初のselectionのみが削除される
+  editor.edit((editBuilder) => {
+    selections.forEach((selection) => {
+      if (selection) {
+        editBuilder.delete(selection);
+      }
     });
-    return;
   });
 }
 
@@ -329,15 +330,12 @@ export function deleteWordRight() {
     return;
   }
 
-  editor.selections.map((selection) => {
+  const selections = editor.selections.map((selection) => {
     const position = selection.active;
 
-    if (selection.anchor.compareTo(selection.active)) {
+    if (selection.anchor.compareTo(selection.active) !== 0) {
       // 選択されている場合は、選択範囲を削除する
-      editor.edit((editBuilder) => {
-        editBuilder.delete(selection);
-      });
-      return;
+      return selection;
     }
 
     const line = position.line;
@@ -349,7 +347,8 @@ export function deleteWordRight() {
 
     if (character === -1) {
       if (line === 0) {
-        return;
+        // 1行目の先頭の場合は何もしない
+        return new vscode.Selection(selection.anchor, selection.anchor);
       } else {
         const previousLine = line - 1;
         const lineText = editor.document.lineAt(previousLine).text;
@@ -361,11 +360,7 @@ export function deleteWordRight() {
           newPosition,
         );
 
-        editor.edit((editBuilder) => {
-          editBuilder.delete(newSelection);
-        });
-
-        return;
+        return newSelection;
       }
     }
 
@@ -375,10 +370,17 @@ export function deleteWordRight() {
 
     const newSelection = new vscode.Selection(selection.anchor, newPosition);
 
-    editor.edit((editBuilder) => {
-      editBuilder.delete(newSelection);
+    return newSelection;
+  });
+
+  // 選択範囲を削除する
+  // editor.edit()の中でselectionをループさせないと、最初のselectionのみが削除される
+  editor.edit((editBuilder) => {
+    selections.forEach((selection) => {
+      if (selection) {
+        editBuilder.delete(selection);
+      }
     });
-    return;
   });
 }
 
