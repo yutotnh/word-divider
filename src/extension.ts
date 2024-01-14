@@ -38,64 +38,65 @@ export function activate(context: vscode.ExtensionContext) {
   );
 }
 
+/**
+ * カーソルを単語の先頭に移動する
+ */
 export function cursorWordLeft() {
   const editor = vscode.window.activeTextEditor;
   if (!editor) {
+    logOutputChannel.warn(
+      "Could not get active text editor. I cannot move the cursor.",
+    );
     return;
   }
 
   editor.selections = editor.selections.map((selection) => {
     const position = selection.active;
+    let line = position.line;
 
-    const line = position.line;
+    if (line === 0 && position.character === 0) {
+      // 1行目の先頭の場合は何もしない
+      return selection;
+    }
+
     const lineText = editor.document.lineAt(line).text;
 
-    const segments = stringToSegments(
-      splitByAll([lineText]),
-      PURPOSE.selectLeft,
+    let character = wordLeftCharacter(
+      stringToSegments(splitByAll([lineText]), PURPOSE.selectLeft),
+      position.character,
     );
 
-    const wordLeftPos = wordLeftCharacter(segments, position.character);
+    // 単語の先頭の位置がない場合は、前の行の最後単語の始めに移動する
+    if (character === -1) {
+      line -= 1;
+      const lineText = editor.document.lineAt(line).text;
 
-    if (wordLeftPos === -1) {
-      if (line === 0) {
-        return selection;
-      } else {
-        const previousLine = line - 1;
-        const lineText = editor.document.lineAt(previousLine).text;
+      character = wordLeftCharacter(
+        stringToSegments(splitByAll([lineText]), PURPOSE.selectLeft),
+        lineText.length,
+      );
 
-        const segments = stringToSegments(
-          splitByAll([lineText]),
-          PURPOSE.selectLeft,
-        );
-
-        let wordLeftPos = wordLeftCharacter(segments, lineText.length);
-
-        if (wordLeftPos === -1) {
-          wordLeftPos = 0;
-        }
-
-        const newPosition = new vscode.Position(previousLine, wordLeftPos);
-
-        const newSelection = new vscode.Selection(newPosition, newPosition);
-
-        return newSelection;
+      // 前の行に単語がない場合は、前の行の先頭に移動する
+      if (character === -1) {
+        character = 0;
       }
     }
 
-    const newPosition = position.with({
-      character: wordLeftPos,
-    });
+    const newPosition = new vscode.Position(line, character);
 
-    const newSelection = new vscode.Selection(newPosition, newPosition);
-
-    return newSelection;
+    return new vscode.Selection(newPosition, newPosition);
   });
 }
 
+/**
+ * カーソルを単語の終わりに移動する
+ */
 export function cursorWordEndRight() {
   const editor = vscode.window.activeTextEditor;
   if (!editor) {
+    logOutputChannel.warn(
+      "Could not get active text editor. I cannot move the cursor.",
+    );
     return;
   }
 
@@ -110,9 +111,9 @@ export function cursorWordEndRight() {
       PURPOSE.selectRight,
     );
 
-    const wordEndRightPos = wordEndRightCharacter(segments, position.character);
+    const character = wordEndRightCharacter(segments, position.character);
 
-    if (wordEndRightPos === -1) {
+    if (character === -1) {
       if (line === editor.document.lineCount - 1) {
         return selection;
       } else {
@@ -124,13 +125,13 @@ export function cursorWordEndRight() {
           PURPOSE.selectRight,
         );
 
-        let wordEndRightPos = wordEndRightCharacter(segments, 0);
+        let character = wordEndRightCharacter(segments, 0);
 
-        if (wordEndRightPos === -1) {
-          wordEndRightPos = lineText.length;
+        if (character === -1) {
+          character = lineText.length;
         }
 
-        const newPosition = new vscode.Position(nextLine, wordEndRightPos);
+        const newPosition = new vscode.Position(nextLine, character);
 
         const newSelection = new vscode.Selection(newPosition, newPosition);
 
@@ -139,7 +140,7 @@ export function cursorWordEndRight() {
     }
 
     const newPosition = position.with({
-      character: wordEndRightPos,
+      character: character,
     });
 
     const newSelection = new vscode.Selection(newPosition, newPosition);
@@ -148,6 +149,9 @@ export function cursorWordEndRight() {
   });
 }
 
+/**
+ * カーソルを単語の先頭まで選択する
+ */
 export function cursorWordLeftSelect() {
   const editor = vscode.window.activeTextEditor;
   if (!editor) {
@@ -206,6 +210,9 @@ export function cursorWordLeftSelect() {
   });
 }
 
+/**
+ * カーソルを単語の終わりまで選択する
+ */
 export function cursorWordEndRightSelect() {
   const editor = vscode.window.activeTextEditor;
   if (!editor) {
@@ -237,13 +244,13 @@ export function cursorWordEndRightSelect() {
           PURPOSE.selectRight,
         );
 
-        let wordEndRightPos = wordEndRightCharacter(segments, 0);
+        let character = wordEndRightCharacter(segments, 0);
 
-        if (wordEndRightPos === -1) {
-          wordEndRightPos = lineText.length;
+        if (character === -1) {
+          character = lineText.length;
         }
 
-        const newPosition = new vscode.Position(nextLine, wordEndRightPos);
+        const newPosition = new vscode.Position(nextLine, character);
 
         const newSelection = new vscode.Selection(
           selection.anchor,
@@ -264,6 +271,9 @@ export function cursorWordEndRightSelect() {
   });
 }
 
+/**
+ * カーソルの左側の単語を削除する
+ */
 export function deleteWordLeft() {
   const editor = vscode.window.activeTextEditor;
   if (!editor) {
@@ -324,6 +334,9 @@ export function deleteWordLeft() {
   });
 }
 
+/**
+ * カーソルの右側の単語を削除する
+ */
 export function deleteWordRight() {
   const editor = vscode.window.activeTextEditor;
   if (!editor) {
@@ -389,18 +402,17 @@ export function deleteWordRight() {
  * - 単語の先頭の位置がない場合は-1を返す
  * @param segments 文字列をSegmentに変換した配列
  * @param character 位置
- * @returns
+ * @returns 単語の先頭の位置
  */
 export function wordLeftCharacter(segments: Segment[], character: number) {
+  // 位置が0以下の場合は、必ず左側に単語がないので-1を返す
   if (character <= 0) {
     return -1;
   }
 
   let result = 0;
   let currentCharacter = 0;
-  for (let i = 0; i < segments.length; i++) {
-    const segment = segments[i];
-
+  for (const segment of segments) {
     if (segment.isWord) {
       if (currentCharacter < character) {
         result = currentCharacter;
@@ -422,26 +434,25 @@ export function wordLeftCharacter(segments: Segment[], character: number) {
  * @param character 位置
  */
 export function wordEndRightCharacter(segments: Segment[], character: number) {
+  // 文字列の長さが0以下の場合は、必ず右側に単語がないので-1を返す
   if (segments.length === 0) {
     return -1;
   }
 
   let currentCharacter = 0;
-  for (let i = 0; i < segments.length; i++) {
-    const segment = segments[i];
-
+  for (const segment of segments) {
     currentCharacter += segment.segment.length;
     if (segment.isWord) {
-      if (currentCharacter <= character) {
-        // 単語の終わりの位置を取得する
-      } else {
+      if (character < currentCharacter) {
         return currentCharacter;
       }
     }
+  }
 
-    if (i === segments.length - 1 && currentCharacter === character) {
-      return -1;
-    }
+  // 全てのセグメントをループしても単語の終わりの位置が見つからず、
+  // characterとcurrentCharacterが同じ場合は、行末にいるので-1を返す
+  if (currentCharacter === character) {
+    return -1;
   }
 
   return currentCharacter;
@@ -472,11 +483,10 @@ type Purpose = (typeof PURPOSE)[keyof typeof PURPOSE];
  * @returns Segmentの配列
  */
 export function stringToSegments(strings: string[], purpose: Purpose) {
-  const result: Segment[] = [];
+  const segments: Segment[] = [];
 
-  const wordSeparators = getWordSeparators();
   const wordSeparatorsRegExp = getWordSeparatorsRegExp(
-    escapeRegExp(wordSeparators),
+    escapeRegExp(getWordSeparators()),
   );
 
   const spaceOnlyRegExp = /^[\s]+$/;
@@ -484,49 +494,60 @@ export function stringToSegments(strings: string[], purpose: Purpose) {
   for (let i = 0; i < strings.length; i++) {
     const string = strings[i];
 
+    // 空白文字のみの要素はisWord=false
     if (spaceOnlyRegExp.test(string)) {
+      // ただし、purpose=PURPOSE.deleteの時は空白文字が2つ以上の場合はisWord=true
       if (1 < string.length && purpose === PURPOSE.delete) {
-        result.push({ segment: string, isWord: true });
+        segments.push({ segment: string, isWord: true });
         continue;
       }
-      result.push({ segment: string, isWord: false });
+      segments.push({ segment: string, isWord: false });
       continue;
     }
 
+    // 空白文字でもなく、editor.wordSeparators中の文字でもない要素はisWord=true
     if (!wordSeparatorsRegExp.test(string)) {
-      result.push({ segment: string, isWord: true });
+      segments.push({ segment: string, isWord: true });
       continue;
     }
 
+    // editor.wordSeparators中の1文字からなる要素はisWord=false
     if (string.length !== 1) {
-      result.push({ segment: string, isWord: true });
+      segments.push({ segment: string, isWord: true });
       continue;
     }
 
-    if (
-      purpose === PURPOSE.selectRight &&
-      i < strings.length - 1 &&
-      spaceOnlyRegExp.test(strings[i + 1])
-    ) {
-      result.push({ segment: string, isWord: true });
-      continue;
-    } else if (
-      purpose === PURPOSE.selectLeft &&
-      0 < i &&
-      spaceOnlyRegExp.test(strings[i - 1])
-    ) {
-      result.push({ segment: string, isWord: true });
-      continue;
-    } else if (purpose === PURPOSE.delete) {
-      result.push({ segment: string, isWord: true });
-      continue;
-    } else {
-      result.push({ segment: string, isWord: false });
-      continue;
+    // editor.wordSeparators中の1文字からなる要素はisWord=false
+    switch (purpose) {
+      case PURPOSE.selectRight:
+        // ただし、purpose=PURPOSE.selectRightの時は後が空白文字の場合はisWord=true
+        if (i < strings.length - 1 && spaceOnlyRegExp.test(strings[i + 1])) {
+          segments.push({ segment: string, isWord: true });
+          continue;
+        } else {
+          segments.push({ segment: string, isWord: false });
+          continue;
+        }
+      case PURPOSE.selectLeft:
+        // ただし、purpose=PURPOSE.selectLeftの時は前が空白文字の場合はisWord=true
+        if (0 < i && spaceOnlyRegExp.test(strings[i - 1])) {
+          segments.push({ segment: string, isWord: true });
+          continue;
+        } else {
+          segments.push({ segment: string, isWord: false });
+          continue;
+        }
+      case PURPOSE.delete:
+        // ただし、purpose=PURPOSE.deleteの時はisWord=true
+        segments.push({ segment: string, isWord: true });
+        continue;
+      default:
+        logOutputChannel.error(`Invalid purpose (${purpose}).`);
+        continue;
     }
   }
 
-  return result;
+  return segments;
 }
 
 /**
@@ -565,7 +586,7 @@ export function getWordSeparators() {
 
   if (typeof wordSeparators !== "string") {
     logOutputChannel.warn(
-      'Could not get editor.wordSeparators.\nContinue processing as editor.wordSeparators="".',
+      'Could not get editor.wordSeparators. Continue processing as editor.wordSeparators="".',
     );
     return "";
   }
@@ -589,7 +610,7 @@ export function splitByWordSeparators(strings: string[]) {
 
   // 区切り文字のみの要素が連続している場合に、連続した区切り文字の要素を1つにまとめる
   // 入力: ["a", ".", ".", "b", "!", "?", "c"]
-  // 期待値: ["a", "..", "b", "!?", "c"]
+  // 期待: ["a", "..", "b", "!?", "c"]
   result = combileConsecutiveElements(
     result,
     new RegExp(wordSeparatorsRegExp.source),
@@ -673,7 +694,7 @@ export function splitByAll(strings: string[]) {
 
   // SplitByWord()を実行した後に、記号が分割されてしまうので、記号をまとめる
   // 入力: ["a", ".", ".", "b", "!", "?", "c"]
-  // 期待値: ["a", "..", "b", "!?", "c"]
+  // 期待: ["a", "..", "b", "!?", "c"]
   const wordSeparators = getWordSeparators();
   const wordSeparatorsRegExp = getWordSeparatorsRegExp(
     escapeRegExp(wordSeparators),
@@ -681,6 +702,7 @@ export function splitByAll(strings: string[]) {
 
   result = combileConsecutiveElements(
     result,
+    // globalフラグがついているとマッチしなくなるのでフラグを外す
     new RegExp(wordSeparatorsRegExp.source),
   );
 
