@@ -6,6 +6,212 @@ import * as extension from "../extension";
 suite("Extension Test Suite", () => {
   vscode.window.showInformationMessage("Start all tests.");
 
+  test("cursorWordLeft", async () => {
+    // テストで用いる区切り文字を設定するためデフォルトのeditor.wordSeparatorsを設定する
+    await setDefaultWordSeparators();
+
+    // カーソルが単語の先頭に移動することを確認する
+    let testNumber = 0;
+    const testCases = [
+      {
+        testNumber: `${testNumber++}`,
+        input: { text: [" "], position: { line: 0, character: 1 } },
+        expected: { text: [" "], position: { line: 0, character: 0 } },
+      },
+      {
+        testNumber: `${testNumber++}`,
+        input: {
+          text: ["abc", " ", "def"],
+          position: { line: 0, character: 3 },
+        },
+        expected: {
+          text: ["abc", " ", "def"],
+          position: { line: 0, character: 0 },
+        },
+      },
+      {
+        testNumber: `${testNumber++}`,
+        input: {
+          text: ["abc", " ", "def"],
+          position: { line: 0, character: 4 },
+        },
+        expected: {
+          text: ["abc", " ", "def"],
+          position: { line: 0, character: 0 },
+        },
+      },
+      {
+        testNumber: `${testNumber++}`,
+        input: {
+          text: ["abc", " ", "def"],
+          position: { line: 1, character: 0 },
+        },
+        expected: {
+          text: ["abc", " ", "def"],
+          position: { line: 0, character: 0 },
+        },
+      },
+      {
+        testNumber: `${testNumber++}`,
+        input: {
+          text: ["分かち書きです", ""],
+          position: { line: 0, character: 7 },
+        },
+        expected: {
+          text: ["分かち書きです", ""],
+          position: { line: 0, character: 5 },
+        },
+      },
+      {
+        testNumber: `${testNumber++}`,
+        input: {
+          text: ["分かち書きです", ""],
+          position: { line: 1, character: 0 },
+        },
+        expected: {
+          text: ["分かち書きです", ""],
+          position: { line: 0, character: 5 },
+        },
+      },
+      {
+        testNumber: `${testNumber++}`,
+        input: { text: ["  ", ""], position: { line: 1, character: 0 } },
+        expected: { text: ["  ", ""], position: { line: 0, character: 0 } },
+      },
+    ];
+
+    for (const testCase of testCases) {
+      // VS Codeのエディタ領域にテキストを設定する
+      const document = await vscode.workspace.openTextDocument({
+        content: testCase.input.text.join("\n"),
+      });
+
+      const editor = await vscode.window.showTextDocument(document);
+
+      // カーソルを設定する
+      editor.selection = new vscode.Selection(
+        new vscode.Position(
+          testCase.input.position.line,
+          testCase.input.position.character,
+        ),
+        new vscode.Position(
+          testCase.input.position.line,
+          testCase.input.position.character,
+        ),
+      );
+
+      // カーソルが単語の先頭に移動することを確認する
+      extension.cursorWordLeft();
+      assert.deepStrictEqual(
+        editor.selection.active,
+        new vscode.Position(
+          testCase.expected.position.line,
+          testCase.expected.position.character,
+        ),
+        `testCase.testNumber: ${testCase.testNumber}`,
+      );
+
+      // テキストが変更されていないことを確認する
+      assert.strictEqual(
+        document.getText(),
+        testCase.expected.text.join("\n"),
+        `testCase.testNumber: ${testCase.testNumber}`,
+      );
+    }
+  }).timeout("20s");
+
+  test("cursorWordEndRight", async () => {
+    // テストで用いる区切り文字を設定するためデフォルトのeditor.wordSeparatorsを設定する
+    await setDefaultWordSeparators();
+
+    // カーソルが単語の末尾に移動することを確認する
+    let testNumber = 0;
+    const testCases = [
+      {
+        testNumber: `${testNumber++}`,
+        input: { text: [" "], position: { line: 0, character: 1 } },
+        expected: { text: [" "], position: { line: 0, character: 1 } },
+      },
+      {
+        testNumber: `${testNumber++}`,
+        input: {
+          text: ["abc", " ", "def"],
+          position: { line: 0, character: 0 },
+        },
+        expected: {
+          text: ["abc", " ", "def"],
+          position: { line: 0, character: 3 },
+        },
+      },
+      {
+        testNumber: `${testNumber++}`,
+        input: {
+          text: ["abc", " ", "def"],
+          position: { line: 1, character: 1 },
+        },
+        expected: {
+          text: ["abc", " ", "def"],
+          position: { line: 2, character: 3 },
+        },
+      },
+      {
+        testNumber: `${testNumber++}`,
+        input: {
+          text: ["分かち書きです", ""],
+          position: { line: 0, character: 0 },
+        },
+        expected: {
+          text: ["分かち書きです", ""],
+          position: { line: 0, character: 5 },
+        },
+      },
+      {
+        testNumber: `${testNumber++}`,
+        input: { text: ["", "   "], position: { line: 0, character: 0 } },
+        expected: { text: ["", "   "], position: { line: 1, character: 3 } },
+      },
+    ];
+
+    for (const testCase of testCases) {
+      // VS Codeのエディタ領域にテキストを設定する
+      const document = await vscode.workspace.openTextDocument({
+        content: testCase.input.text.join("\n"),
+      });
+
+      const editor = await vscode.window.showTextDocument(document);
+
+      // カーソルを設定する
+      editor.selection = new vscode.Selection(
+        new vscode.Position(
+          testCase.input.position.line,
+          testCase.input.position.character,
+        ),
+        new vscode.Position(
+          testCase.input.position.line,
+          testCase.input.position.character,
+        ),
+      );
+
+      // カーソルが単語の末尾に移動することを確認する
+      extension.cursorWordEndRight();
+      assert.deepStrictEqual(
+        editor.selection.active,
+        new vscode.Position(
+          testCase.expected.position.line,
+          testCase.expected.position.character,
+        ),
+        `testCase.testNumber: ${testCase.testNumber}`,
+      );
+
+      // テキストが変更されていないことを確認する
+      assert.strictEqual(
+        document.getText(),
+        testCase.expected.text.join("\n"),
+        `testCase.testNumber: ${testCase.testNumber}`,
+      );
+    }
+  }).timeout("20s");
+
   test("escapeRegExp", () => {
     // 正規表現でエスケープが必要な以下の文字がエスケープされているか確認する
     // . * + ? ^ $ { } ( ) | [ ] \
