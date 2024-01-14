@@ -3,12 +3,16 @@ on:
   release:
     types:
       - published
+  push:
 
 permissions:
   contents: write
 
 jobs:
+  test:
+    uses: "${{ github.repository }}/.github/workflows/test.yml"
   publish:
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -18,13 +22,14 @@ jobs:
         with:
           node-version: 18.x
       - run: yarn install
-      - name: Publish
-        run: yarn vscode:publish
-        env:
-          VSCE_PAT: ${{ secrets.VSCE_PAT }}
-      - name: Create package
-        run: yarn vsce package
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: wave-dash-unify-*.vsix
+      # 動作確認中のため、一旦コメントアウト
+      # - name: Publish
+      #   run: yarn vscode:publish
+      #   env:
+      #     VSCE_PAT: ${{ secrets.VSCE_PAT }}
+      # - name: Create package
+      #   run: yarn vsce package
+      # - name: Release
+      #   uses: softprops/action-gh-release@v1
+      #   with:
+      #     files: wave-dash-unify-*.vsix
