@@ -25,10 +25,8 @@ jobs:
       - name: lint
         run: yarn lint
   actionlint:
-    strategy:
-      matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
-    runs-on: ${{ matrix.os }}
+    # reviewdog/action-actionlint is only supported on Linux
+    runs-on: "ubuntu-latest"
     steps:
       - uses: actions/checkout@v4
       - uses: reviewdog/action-actionlint@v1
