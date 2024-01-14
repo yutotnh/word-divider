@@ -21,3 +21,9 @@ jobs:
       - run: yarn install
       - name: lint
         run: yarn lint
+  actionlint:
+    # reviewdog/action-actionlint is only supported on Linux
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: reviewdog/action-actionlint@v1
