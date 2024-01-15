@@ -212,6 +212,451 @@ suite("Extension Test Suite", () => {
     }
   }).timeout("20s");
 
+  test("cursorWordLeftSelect", async () => {
+    // カーソルが単語の先頭に移動することを確認する
+    let testNumber = 0;
+    const testCases = [
+      {
+        testNumber: `${testNumber++}`,
+        input: {
+          text: ["abc", " ", "def"],
+          selection: {
+            anchor: { line: 0, character: 3 },
+            active: { line: 0, character: 2 },
+          },
+        },
+        expected: {
+          text: ["abc", " ", "def"],
+          selection: {
+            anchor: { line: 0, character: 3 },
+            active: { line: 0, character: 0 },
+          },
+        },
+      },
+      {
+        testNumber: `${testNumber++}`,
+        input: {
+          text: ["分かち書きです"],
+          selection: {
+            anchor: { line: 0, character: 7 },
+            active: { line: 0, character: 6 },
+          },
+        },
+        expected: {
+          text: ["分かち書きです"],
+          selection: {
+            anchor: { line: 0, character: 7 },
+            active: { line: 0, character: 5 },
+          },
+        },
+      },
+      {
+        testNumber: `${testNumber++}`,
+        input: {
+          text: ["分かち書きです", "", " "],
+          selection: {
+            anchor: { line: 2, character: 1 },
+            active: { line: 1, character: 0 },
+          },
+        },
+        expected: {
+          text: ["分かち書きです", "", " "],
+          selection: {
+            anchor: { line: 2, character: 1 },
+            active: { line: 0, character: 5 },
+          },
+        },
+      },
+    ];
+
+    for (const testCase of testCases) {
+      // VS Codeのエディタ領域にテキストを設定する
+      const document = await vscode.workspace.openTextDocument({
+        content: testCase.input.text.join("\n"),
+      });
+
+      const editor = await vscode.window.showTextDocument(document);
+
+      // カーソルを設定する
+      editor.selection = new vscode.Selection(
+        new vscode.Position(
+          testCase.input.selection.anchor.line,
+          testCase.input.selection.anchor.character,
+        ),
+        new vscode.Position(
+          testCase.input.selection.active.line,
+          testCase.input.selection.active.character,
+        ),
+      );
+
+      // 選択範囲が単語の先頭に移動することを確認する
+      extension.cursorWordLeftSelect();
+
+      assert.deepStrictEqual(
+        editor.selection.anchor,
+        new vscode.Position(
+          testCase.expected.selection.anchor.line,
+          testCase.expected.selection.anchor.character,
+        ),
+        `testCase.testNumber(anchor): ${testCase.testNumber}`,
+      );
+
+      assert.deepStrictEqual(
+        editor.selection.active,
+        new vscode.Position(
+          testCase.expected.selection.active.line,
+          testCase.expected.selection.active.character,
+        ),
+        `testCase.testNumber(active): ${testCase.testNumber}`,
+      );
+
+      // テキストが変更されていないことを確認する
+      assert.strictEqual(
+        document.getText(),
+        testCase.expected.text.join("\n"),
+        `testCase.testNumber(text): ${testCase.testNumber}`,
+      );
+    }
+  }).timeout("20s");
+
+  test("cursorWordEndRightSelect", async () => {
+    // カーソルが単語の先頭に移動することを確認する
+    let testNumber = 0;
+    const testCases = [
+      {
+        testNumber: `${testNumber++}`,
+        input: {
+          text: ["abc", " ", "def"],
+          selection: {
+            anchor: { line: 0, character: 2 },
+            active: { line: 2, character: 3 },
+          },
+        },
+        expected: {
+          text: ["abc", " ", "def"],
+          selection: {
+            anchor: { line: 0, character: 2 },
+            active: { line: 2, character: 3 },
+          },
+        },
+      },
+      {
+        testNumber: `${testNumber++}`,
+        input: {
+          text: ["abc", " ", "def"],
+          selection: {
+            anchor: { line: 0, character: 2 },
+            active: { line: 0, character: 3 },
+          },
+        },
+        expected: {
+          text: ["abc", " ", "def"],
+          selection: {
+            anchor: { line: 0, character: 2 },
+            active: { line: 1, character: 1 },
+          },
+        },
+      },
+      {
+        testNumber: `${testNumber++}`,
+        input: {
+          text: ["分かち書きです"],
+          selection: {
+            anchor: { line: 0, character: 3 },
+            active: { line: 0, character: 3 },
+          },
+        },
+        expected: {
+          text: ["分かち書きです"],
+          selection: {
+            anchor: { line: 0, character: 3 },
+            active: { line: 0, character: 5 },
+          },
+        },
+      },
+      {
+        testNumber: `${testNumber++}`,
+        input: {
+          text: ["分かち書きです", "", " こんにちは"],
+          selection: {
+            anchor: { line: 0, character: 7 },
+            active: { line: 1, character: 0 },
+          },
+        },
+        expected: {
+          text: ["分かち書きです", "", " こんにちは"],
+          selection: {
+            anchor: { line: 0, character: 7 },
+            active: { line: 2, character: 6 },
+          },
+        },
+      },
+    ];
+
+    for (const testCase of testCases) {
+      // VS Codeのエディタ領域にテキストを設定する
+      const document = await vscode.workspace.openTextDocument({
+        content: testCase.input.text.join("\n"),
+      });
+
+      const editor = await vscode.window.showTextDocument(document);
+
+      // カーソルを設定する
+      editor.selection = new vscode.Selection(
+        new vscode.Position(
+          testCase.input.selection.anchor.line,
+          testCase.input.selection.anchor.character,
+        ),
+        new vscode.Position(
+          testCase.input.selection.active.line,
+          testCase.input.selection.active.character,
+        ),
+      );
+
+      // 選択範囲が単語の後ろに移動することを確認する
+      extension.cursorWordEndRightSelect();
+
+      assert.deepStrictEqual(
+        editor.selection.anchor,
+        new vscode.Position(
+          testCase.expected.selection.anchor.line,
+          testCase.expected.selection.anchor.character,
+        ),
+        `testCase.testNumber(anchor): ${testCase.testNumber}`,
+      );
+
+      assert.deepStrictEqual(
+        editor.selection.active,
+        new vscode.Position(
+          testCase.expected.selection.active.line,
+          testCase.expected.selection.active.character,
+        ),
+        `testCase.testNumber(active): ${testCase.testNumber}`,
+      );
+
+      // テキストが変更されていないことを確認する
+      assert.strictEqual(
+        document.getText(),
+        testCase.expected.text.join("\n"),
+        `testCase.testNumber(text): ${testCase.testNumber}`,
+      );
+    }
+  }).timeout("20s");
+
+  test("deleteWordLeft", async () => {
+    // カーソルが単語の先頭に移動することを確認する
+    let testNumber = 0;
+    const testCases = [
+      {
+        testNumber: `${testNumber++}`,
+        input: {
+          text: ["分かち書きです"],
+          selection: {
+            anchor: { line: 0, character: 7 },
+            active: { line: 0, character: 7 },
+          },
+        },
+        expected: {
+          text: ["分かち書き"],
+          selection: {
+            anchor: { line: 0, character: 5 },
+            active: { line: 0, character: 5 },
+          },
+        },
+      },
+      {
+        testNumber: `${testNumber++}`,
+        input: {
+          text: ["分かち書きです"],
+          selection: {
+            anchor: { line: 0, character: 5 },
+            active: { line: 0, character: 6 },
+          },
+        },
+        expected: {
+          text: ["分かち書きす"],
+          selection: {
+            anchor: { line: 0, character: 5 },
+            active: { line: 0, character: 5 },
+          },
+        },
+      },
+      {
+        testNumber: `${testNumber++}`,
+        input: {
+          text: [" ", ""],
+          selection: {
+            anchor: { line: 1, character: 0 },
+            active: { line: 1, character: 0 },
+          },
+        },
+        expected: {
+          text: [" "],
+          selection: {
+            anchor: { line: 0, character: 1 },
+            active: { line: 0, character: 1 },
+          },
+        },
+      },
+    ];
+
+    for (const testCase of testCases) {
+      // VS Codeのエディタ領域にテキストを設定する
+      const document = await vscode.workspace.openTextDocument({
+        content: testCase.input.text.join("\n"),
+      });
+
+      const editor = await vscode.window.showTextDocument(document);
+
+      // カーソルを設定する
+      editor.selection = new vscode.Selection(
+        new vscode.Position(
+          testCase.input.selection.anchor.line,
+          testCase.input.selection.anchor.character,
+        ),
+        new vscode.Position(
+          testCase.input.selection.active.line,
+          testCase.input.selection.active.character,
+        ),
+      );
+
+      // 選択範囲が単語の後ろに移動することを確認する
+      await extension.deleteWordLeft();
+
+      assert.deepStrictEqual(
+        editor.selection.anchor,
+        new vscode.Position(
+          testCase.expected.selection.anchor.line,
+          testCase.expected.selection.anchor.character,
+        ),
+        `testCase.testNumber(anchor): ${testCase.testNumber}`,
+      );
+
+      assert.deepStrictEqual(
+        editor.selection.active,
+        new vscode.Position(
+          testCase.expected.selection.active.line,
+          testCase.expected.selection.active.character,
+        ),
+        `testCase.testNumber(active): ${testCase.testNumber}`,
+      );
+
+      // テキストが変更されていないことを確認する
+      assert.strictEqual(
+        document.getText(),
+        testCase.expected.text.join("\n"),
+        `testCase.testNumber(text): ${testCase.testNumber}`,
+      );
+    }
+  }).timeout("20s");
+
+  test("deleteWordRight", async () => {
+    // カーソルが単語の先頭に移動することを確認する
+    let testNumber = 0;
+    const testCases = [
+      {
+        testNumber: `${testNumber++}`,
+        input: {
+          text: ["分かち書きです"],
+          selection: {
+            anchor: { line: 0, character: 5 },
+            active: { line: 0, character: 5 },
+          },
+        },
+        expected: {
+          text: ["分かち書き"],
+          selection: {
+            anchor: { line: 0, character: 5 },
+            active: { line: 0, character: 5 },
+          },
+        },
+      },
+      {
+        testNumber: `${testNumber++}`,
+        input: {
+          text: ["分かち書きです"],
+          selection: {
+            anchor: { line: 0, character: 2 },
+            active: { line: 0, character: 4 },
+          },
+        },
+        expected: {
+          text: ["分かきです"],
+          selection: {
+            anchor: { line: 0, character: 2 },
+            active: { line: 0, character: 2 },
+          },
+        },
+      },
+      {
+        testNumber: `${testNumber++}`,
+        input: {
+          text: ["a", " b"],
+          selection: {
+            anchor: { line: 0, character: 1 },
+            active: { line: 0, character: 1 },
+          },
+        },
+        expected: {
+          text: ["ab"],
+          selection: {
+            anchor: { line: 0, character: 1 },
+            active: { line: 0, character: 1 },
+          },
+        },
+      },
+    ];
+
+    for (const testCase of testCases) {
+      // VS Codeのエディタ領域にテキストを設定する
+      const document = await vscode.workspace.openTextDocument({
+        content: testCase.input.text.join("\n"),
+      });
+
+      const editor = await vscode.window.showTextDocument(document);
+
+      // カーソルを設定する
+      editor.selection = new vscode.Selection(
+        new vscode.Position(
+          testCase.input.selection.anchor.line,
+          testCase.input.selection.anchor.character,
+        ),
+        new vscode.Position(
+          testCase.input.selection.active.line,
+          testCase.input.selection.active.character,
+        ),
+      );
+
+      // 選択範囲が単語の後ろに移動することを確認する
+      await extension.deleteWordRight();
+
+      assert.deepStrictEqual(
+        editor.selection.anchor,
+        new vscode.Position(
+          testCase.expected.selection.anchor.line,
+          testCase.expected.selection.anchor.character,
+        ),
+        `testCase.testNumber(anchor): ${testCase.testNumber}`,
+      );
+
+      assert.deepStrictEqual(
+        editor.selection.active,
+        new vscode.Position(
+          testCase.expected.selection.active.line,
+          testCase.expected.selection.active.character,
+        ),
+        `testCase.testNumber(active): ${testCase.testNumber}`,
+      );
+
+      // テキストが変更されていないことを確認する
+      assert.strictEqual(
+        document.getText(),
+        testCase.expected.text.join("\n"),
+        `testCase.testNumber(text): ${testCase.testNumber}`,
+      );
+    }
+  }).timeout("20s");
+
   test("escapeRegExp", () => {
     // 正規表現でエスケープが必要な以下の文字がエスケープされているか確認する
     // . * + ? ^ $ { } ( ) | [ ] \
