@@ -256,7 +256,7 @@ export function deleteWordLeft() {
       position.character,
     );
 
-    // 単語の先頭の位置がない場合は、前の行の最後単語の始めに移動する
+    // 単語の先頭の位置がない場合は、前の行の最後に移動する
     if (character === -1) {
       if (line === 0) {
         // 1行目の場合はその前には単語がないので何もしない
@@ -275,7 +275,7 @@ export function deleteWordLeft() {
 
   // 選択範囲を削除する
   // editor.edit()の中でselectionをループさせないと、最初のselectionのみが削除される
-  editor.edit((editBuilder) => {
+  return editor.edit((editBuilder) => {
     selections.forEach((selection) => {
       editBuilder.delete(selection);
     });
@@ -330,7 +330,7 @@ export function deleteWordRight() {
 
   // 選択範囲を削除する
   // editor.edit()の中でselectionをループさせないと、最初のselectionのみが削除される
-  editor.edit((editBuilder) => {
+  return editor.edit((editBuilder) => {
     selections.forEach((selection) => {
       editBuilder.delete(selection);
     });
@@ -418,6 +418,7 @@ type Purpose = (typeof PURPOSE)[keyof typeof PURPOSE];
  *   - ただし、purpose=PURPOSE.selectRightの時は後が空白文字の場合はisWord=true
  *   - ただし、purpose=PURPOSE.selectLeft の時は前が空白文字の場合はisWord=true
  *   - ただし、purpose=PURPOSE.delete     の時はisWord=true
+ *   - ただし、purpose=PURPOSE.delete     の時は行の先頭に空白文字がある場合はその空白はisWord=true
  * - それ以外はisWord=true
  * @param strings
  * @returns Segmentの配列
@@ -437,9 +438,16 @@ export function stringToSegments(strings: string[], purpose: Purpose) {
     // 空白文字のみの要素はisWord=false
     if (spaceOnlyRegExp.test(string)) {
       // ただし、purpose=PURPOSE.deleteの時は空白文字が2つ以上の場合はisWord=true
-      if (1 < string.length && purpose === PURPOSE.delete) {
-        segments.push({ segment: string, isWord: true });
-        continue;
+      // ただし、purpose=PURPOSE.deleteの時は行の先頭に空白文字がある場合はその空白はisWord=true
+      if (purpose === PURPOSE.delete) {
+        if (1 < string.length) {
+          segments.push({ segment: string, isWord: true });
+          continue;
+        }
+        if (i === 0) {
+          segments.push({ segment: string, isWord: true });
+          continue;
+        }
       }
       segments.push({ segment: string, isWord: false });
       continue;
