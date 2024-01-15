@@ -1,0 +1,42 @@
+{
+  "version": "0.2",
+  "ignorePaths": [".git"],
+  "dictionaryDefinitions": [],
+  "dictionaries": [
+    "en_US",
+    "companies",
+    "softwareTerms",
+    "misc",
+    "typescript",
+    "npm"
+  ],
+  "words": [
+    "amodio",
+    "armhf",
+    "Autobuild",
+    "buildscript",
+    "codeql",
+    "dbaeumer",
+    "dearmor",
+    "devcontainer",
+    "devcontainers",
+    "dhoeric",
+    "esbenp",
+    "keyrings",
+    "noninteractive",
+    "nosources",
+    "reviewdog",
+    "sgryjp",
+    "softprops",
+    "vscodeignore",
+    "vsix",
+    "xauth",
+    "xvfb",
+    "yutotnh"
+  ],
+  "ignoreWords": [],
+  "import": [],
+  "useGitignore": true,
+  "enableGlobDot": true,
+  "enabled": true
+}

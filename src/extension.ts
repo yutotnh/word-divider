@@ -559,7 +559,7 @@ export function splitByWordSeparators(strings: string[]) {
   // 区切り文字のみの要素が連続している場合に、連続した区切り文字の要素を1つにまとめる
   // 入力: ["a", ".", ".", "b", "!", "?", "c"]
   // 期待: ["a", "..", "b", "!?", "c"]
-  result = combileConsecutiveElements(
+  result = combineConsecutiveElements(
     result,
     new RegExp(wordSeparatorsRegExp.source),
   );
@@ -581,7 +581,7 @@ export function splitBySpace(strings: string[]) {
   }
 
   // スペースのみの要素が連続している場合に、連続したスペースの要素を1つにまとめる
-  result = combileConsecutiveElements(result, /^([\s]+)$/);
+  result = combineConsecutiveElements(result, /^([\s]+)$/);
 
   return result;
 }
@@ -589,13 +589,13 @@ export function splitBySpace(strings: string[]) {
 /**
  * 指定した条件に一致する要素を結合する
  * @param strings 結合する文字列の配列
- * @param pettern 結合する条件
+ * @param pattern 結合する条件
  * @returns 結合した文字列の配列
  */
-export function combileConsecutiveElements(strings: string[], pettern: RegExp) {
+export function combineConsecutiveElements(strings: string[], pattern: RegExp) {
   for (let i = 0; i < strings.length - 1; i++) {
-    if (pettern.test(strings[i])) {
-      while (pettern.test(strings[i + 1])) {
+    if (pattern.test(strings[i])) {
+      while (pattern.test(strings[i + 1])) {
         strings[i] = strings[i] + strings[i + 1];
         strings.splice(i + 1, 1);
       }
@@ -648,14 +648,14 @@ export function splitByAll(strings: string[]) {
     escapeRegExp(wordSeparators),
   );
 
-  result = combileConsecutiveElements(
+  result = combineConsecutiveElements(
     result,
     // globalフラグがついているとマッチしなくなるのでフラグを外す
     new RegExp(wordSeparatorsRegExp.source),
   );
 
   // SplitBySpace()を実行した後に、タブとスペースが分割されてしまうので、タブとスペースをまとめる
-  result = combileConsecutiveElements(result, /^[\s]+$/);
+  result = combineConsecutiveElements(result, /^[\s]+$/);
 
   return result;
 }

@@ -790,30 +790,30 @@ suite("Extension Test Suite", () => {
     );
   });
 
-  test("combileConsecutiveElements", () => {
+  test("combineConsecutiveElements", () => {
     // 連続した要素がまとめられることを確認する
     assert.deepStrictEqual(
-      extension.combileConsecutiveElements([".", "|"], /[\\.|!]+/),
+      extension.combineConsecutiveElements([".", "|"], /[\\.|!]+/),
       [".|"],
     );
 
     assert.deepStrictEqual(
-      extension.combileConsecutiveElements(["  ", " "], /^([\s]+)$/),
+      extension.combineConsecutiveElements(["  ", " "], /^([\s]+)$/),
       ["   "],
     );
 
     assert.deepStrictEqual(
-      extension.combileConsecutiveElements(["\t", " ", "\t"], /^([\s]+)$/),
+      extension.combineConsecutiveElements(["\t", " ", "\t"], /^([\s]+)$/),
       ["\t \t"],
     );
 
     assert.deepStrictEqual(
-      extension.combileConsecutiveElements([".", "|", "!"], /[\\.|!]+/),
+      extension.combineConsecutiveElements([".", "|", "!"], /[\\.|!]+/),
       [".|!"],
     );
 
     assert.deepStrictEqual(
-      extension.combileConsecutiveElements(
+      extension.combineConsecutiveElements(
         ["a", ".", "|", "!", "b", "c"],
         /[(\\.|!)]+/,
       ),
