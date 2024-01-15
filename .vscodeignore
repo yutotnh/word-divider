@@ -7,8 +7,10 @@ node_modules/**
 src/**
 .gitignore
 .yarnrc
+.cspell.json
+.prettierrc.json
+.prettierignore
 webpack.config.js
-vsc-extension-quickstart.md
 **/tsconfig.json
 **/.eslintrc.json
 **/*.map
