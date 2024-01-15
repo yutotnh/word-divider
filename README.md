@@ -2,6 +2,8 @@
 
 Enable cursor movement in Japanese sentences on a word-by-word basis.
 
+![examples](./docs/examples.gif)
+
 ## Features
 
 | Command                               | Keybinding for Windows and Linux | Keybinding for Mac | Command to be overwritten | Description                      |
