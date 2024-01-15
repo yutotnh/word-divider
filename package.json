@@ -2,7 +2,7 @@
   "name": "word-divider",
   "displayName": "Word Divider",
   "description": "Enable cursor movement in Japanese sentences on a word-by-word basis",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "publisher": "yutotnh",
   "license": "SEE LICENSE IN LICENSE",
   "bugs": {
@@ -91,6 +91,7 @@
     "@vscode/test-cli": "^0.0.4",
     "@vscode/test-electron": "^2.3.8",
     "@vscode/vsce": "^2.22.0",
+    "cspell": "^8.3.2",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "prettier": "^3.1.1",
