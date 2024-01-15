@@ -1,4 +1,4 @@
-# word-divider README
+# Word Divider
 
 Enable cursor movement in Japanese sentences on a word-by-word basis.
 
@@ -19,8 +19,12 @@ none
 
 ## Known Issues
 
-none
+- Cannot double click to select a word.
 
 ## Release Notes
 
 See [CHANGELOG.md](CHANGELOG.md)
+
+## Inspired By
+
+This extension is inspired by [sgryjp/japanese-word-handler](https://github.com/sgryjp/japanese-word-handler).
