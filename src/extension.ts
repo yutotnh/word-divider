@@ -503,7 +503,9 @@ export function stringToSegments(strings: string[], purpose: Purpose) {
  * @param string エスケープする文字列
  */
 export function escapeRegExp(string: string) {
-  return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  // 範囲で囲ったときに'-'が意図しない挙動をするので'-'エスケープする
+  // '-'はエスケープしても問題がなさそう
+  return string.replace(/[.*+?^${}()|[\]\\-]/g, "\\$&");
 }
 
 /**
