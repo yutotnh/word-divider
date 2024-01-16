@@ -45,7 +45,7 @@ export function cursorWordLeft() {
   const editor = vscode.window.activeTextEditor;
   if (!editor) {
     logOutputChannel.warn(
-      "Could not get active text editor. Cannot move the cursor.",
+      "Could not get active text editor. Cannot move the cursor." ,
     );
     return;
   }
