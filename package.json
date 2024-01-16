@@ -2,7 +2,7 @@
   "name": "word-divider",
   "displayName": "Word Divider",
   "description": "Enable cursor movement in Japanese sentences on a word-by-word basis",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "yutotnh",
   "license": "SEE LICENSE IN LICENSE",
   "bugs": {
