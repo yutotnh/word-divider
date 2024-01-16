@@ -20,10 +20,15 @@ jobs:
           node-version: 16.x
       - run: yarn install
       - name: eslint
+        if: ${{ github.event_name == 'pull_request' }}
         uses: reviewdog/action-eslint@v1
         with:
           eslint_flags: "src --ext ts"
           fail_on_error: "true"
+      - name: eslint
+        if: ${{ github.event_name != 'pull_request' }}
+        run: yarn eslint src --ext ts
+
   actionlint:
     # reviewdog/action-actionlint is only supported on Linux
     runs-on: "ubuntu-latest"
