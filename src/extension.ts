@@ -45,7 +45,7 @@ export function cursorWordLeft() {
   const editor = vscode.window.activeTextEditor;
   if (!editor) {
     logOutputChannel.warn(
-      "Could not get active text editor. Cannot move the cursor." ,
+      "Could not get active text editor. Cannot move the cursor.",
     );
     return;
   }
@@ -69,7 +69,7 @@ export function cursorWordLeft() {
       }
 
       line -= 1;
-      const lineText = editor.document.lineAt(line).text;
+      let lineText = editor.document.lineAt(line).text;
 
       character = wordLeftCharacter(
         stringToSegments(splitByAll([lineText]), PURPOSE.selectLeft),
