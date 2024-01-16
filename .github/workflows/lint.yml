@@ -30,4 +30,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: reviewdog/action-actionlint@v1
-      - run: echo ${{ github.event.pull_request }}
+        if: ${{ github.event_name == 'pull_request' }}
+        with:
+          reporter: github-pr-review
+          fail_on_error: "true"
+      - run: |
+          bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
+          ./actionlint -color
+        if: ${{ github.event_name != 'pull_request' }}
