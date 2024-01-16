@@ -19,8 +19,11 @@ jobs:
         with:
           node-version: 16.x
       - run: yarn install
-      - name: lint
-        run: yarn lint
+      - name: eslint
+        uses: reviewdog/action-eslint@v1
+        with:
+          eslint_flags: "src --ext ts"
+          fail_on_error: "true"
   actionlint:
     # reviewdog/action-actionlint is only supported on Linux
     runs-on: "ubuntu-latest"
