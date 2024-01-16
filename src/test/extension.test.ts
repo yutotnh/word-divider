@@ -874,6 +874,11 @@ suite("Extension Test Suite", () => {
       extension.splitByWordSeparators(["a.", "|", ".b", "c"]),
       ["a", ".|.", "b", "c"],
     );
+
+    // 数値+英語でもつながっている場合はそのまま単語として認識されることを確認する
+    assert.deepStrictEqual(extension.splitByWordSeparators(["string1"]), [
+      "string1",
+    ]);
   }).timeout("20s");
 
   test("splitByWord", () => {
@@ -936,6 +941,8 @@ suite("Extension Test Suite", () => {
       "\t \t",
       "b",
     ]);
+
+    assert.deepStrictEqual(extension.splitByAll(["string1"]), ["string1"]);
   }).timeout("20s");
 
   test("wordLeftPosition", () => {
