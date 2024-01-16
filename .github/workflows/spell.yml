@@ -17,10 +17,10 @@ jobs:
       - name: Inistall Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 16.x
+          node-version: 18.x
       - uses: reviewdog/action-setup@v1
       - run: yarn install
       - name: Spell check
-        run: yarn cspell . | reviewdog -efm="%f:%l:%c - %m" -reporter=github-pr-check -level=error
+        run: yarn cspell . | reviewdog -efm="%f:%l:%c - %m" -reporter=github-pr-review -filter-mode=nofilter
         env:
           REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
