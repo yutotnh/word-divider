@@ -19,11 +19,27 @@ jobs:
         with:
           node-version: 16.x
       - run: yarn install
-      - name: lint
-        run: yarn lint
+      - name: eslint
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: reviewdog/action-eslint@v1
+        with:
+          eslint_flags: "src --ext ts"
+          fail_on_error: "true"
+      - name: eslint
+        if: ${{ github.event_name != 'pull_request' }}
+        run: yarn eslint src --ext ts
+
   actionlint:
     # reviewdog/action-actionlint is only supported on Linux
     runs-on: "ubuntu-latest"
     steps:
       - uses: actions/checkout@v4
       - uses: reviewdog/action-actionlint@v1
+        if: ${{ github.event_name == 'pull_request' }}
+        with:
+          reporter: github-pr-review
+          fail_on_error: "true"
+      - run: |
+          bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
+          ./actionlint -color
+        if: ${{ github.event_name != 'pull_request' }}
