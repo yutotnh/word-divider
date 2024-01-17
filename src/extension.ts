@@ -5,7 +5,7 @@ let logOutputChannel: vscode.LogOutputChannel;
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-  let extensionDisplayName = "Word Divider";
+  const extensionDisplayName = "Word Divider";
   logOutputChannel = vscode.window.createOutputChannel(extensionDisplayName, {
     log: true,
   });
@@ -69,7 +69,7 @@ export function cursorWordLeft() {
       }
 
       line -= 1;
-      let lineText = editor.document.lineAt(line).text;
+      const lineText = editor.document.lineAt(line).text;
 
       character = wordLeftCharacter(
         stringToSegments(splitByAll([lineText]), PURPOSE.selectLeft),
