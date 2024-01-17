@@ -25,4 +25,6 @@ jobs:
           fail_on_error: "true"
       - name: format check
         if: ${{ github.event_name != 'pull_request' }}
-        run: yarn prettier . --check
+        run: |
+          yarn prettier . --write
+          git diff --exit-code
