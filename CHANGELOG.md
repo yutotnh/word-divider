@@ -6,6 +6,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [0.1.1] - 2024-01-17
+
 ### Fixed
 
 - Numbers and English letters are recognized as separate words. [#28](https://github.com/yutotnh/word-divider/issues/28)
