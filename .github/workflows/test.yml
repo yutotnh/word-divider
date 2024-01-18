@@ -20,7 +20,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 16.x
+          node-version-file: ./.node-version
       - run: yarn install
       - run: xvfb-run -a yarn test
         if: runner.os == 'Linux'
