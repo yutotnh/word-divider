@@ -21,6 +21,7 @@ jobs:
         uses: reviewdog/action-eslint@v1
         with:
           eslint_flags: "src --ext ts"
+          filter_mode: nofilter
           fail_on_error: "true"
       - name: eslint
         if: ${{ github.event_name != 'pull_request' }}
