@@ -6,6 +6,12 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [0.1.2] - 2024-01-19
+
+### Fixed
+
+- Source Control text input doesn't work. [#44](https://github.com/yutotnh/word-divider/issues/44)
+
 ## [0.1.1] - 2024-01-17
 
 ### Fixed
