@@ -35,37 +35,37 @@
         "command": "word-divider.cursorWordLeft",
         "key": "ctrl+left",
         "mac": "alt+left",
-        "when": "textInputFocus && !accessibilityModeEnabled"
+        "when": "editorTextFocus && !accessibilityModeEnabled"
       },
       {
         "command": "word-divider.cursorWordEndRight",
         "key": "ctrl+right",
         "mac": "alt+right",
-        "when": "textInputFocus && !accessibilityModeEnabled"
+        "when": "editorTextFocus && !accessibilityModeEnabled"
       },
       {
         "command": "word-divider.cursorWordLeftSelect",
         "key": "ctrl+shift+left",
         "mac": "shift+alt+left",
-        "when": "textInputFocus && !accessibilityModeEnabled"
+        "when": "editorTextFocus && !accessibilityModeEnabled"
       },
       {
         "command": "word-divider.cursorWordEndRightSelect",
         "key": "ctrl+shift+right",
         "mac": "shift+alt+right",
-        "when": "textInputFocus && !accessibilityModeEnabled"
+        "when": "editorTextFocus && !accessibilityModeEnabled"
       },
       {
         "command": "word-divider.deleteWordLeft",
         "key": "ctrl+backspace",
         "mac": "alt+backspace",
-        "when": "textInputFocus && !editorReadonly"
+        "when": "editorTextFocus && !editorReadonly"
       },
       {
         "command": "word-divider.deleteWordRight",
         "key": "ctrl+delete",
         "mac": "alt+delete",
-        "when": "textInputFocus && !editorReadonly"
+        "when": "editorTextFocus && !editorReadonly"
       }
     ]
   },
