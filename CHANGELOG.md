@@ -6,6 +6,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+### Fixed
+
+- Improve README image. [#49](https://github.com/yutotnh/word-divider/pull/49)
+
 ## [0.1.2] - 2024-01-19
 
 ### Fixed
