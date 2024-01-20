@@ -20,6 +20,18 @@
   "categories": [
     "Other"
   ],
+  "keywords": [
+    "cursor",
+    "日本語",
+    "japanese",
+    "chinese"
+  ],
+  "capabilities": {
+    "virtualWorkspaces": true,
+    "untrustedWorkspaces": {
+      "supported": true
+    }
+  },
   "activationEvents": [
     "onCommand:wordDivider.cursorWordLeft",
     "onCommand:wordDivider.cursorWordEndRight",
@@ -121,6 +133,7 @@
     "assert": "^2.1.0",
     "cspell": "^8.3.2",
     "eslint": "^8.56.0",
+    "eslint-plugin-security": "^2.1.0",
     "mocha": "^10.2.0",
     "prettier": "^3.2.4",
     "process": "^0.11.10",
