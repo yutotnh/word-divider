@@ -8,7 +8,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Added
 
-- Suport Chinese. [#52](https://github.com/yutotnh/word-divider/issues/52)
+- Support Chinese. [#52](https://github.com/yutotnh/word-divider/issues/52)
 
 ### Fixed
 
