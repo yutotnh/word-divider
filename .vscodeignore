@@ -1,5 +1,7 @@
 .vscode/**
 .vscode-test-web/**
+.devcontainer/**
+.github/**
 src/**
 out/**
 node_modules/**
