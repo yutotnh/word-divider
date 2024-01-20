@@ -1,4 +1,4 @@
-import * as assert from "assert";
+import * as assert from "assert/strict";
 
 import * as vscode from "vscode";
 import * as extension from "../extension";
@@ -102,7 +102,7 @@ suite("Extension Test Suite", () => {
 
       // カーソルが単語の先頭に移動することを確認する
       extension.cursorWordLeft();
-      assert.deepStrictEqual(
+      assert.deepEqual(
         editor.selection.active,
         new vscode.Position(
           testCase.expected.position.line,
@@ -194,7 +194,7 @@ suite("Extension Test Suite", () => {
 
       // カーソルが単語の末尾に移動することを確認する
       extension.cursorWordEndRight();
-      assert.deepStrictEqual(
+      assert.deepEqual(
         editor.selection.active,
         new vscode.Position(
           testCase.expected.position.line,
@@ -292,7 +292,7 @@ suite("Extension Test Suite", () => {
       // 選択範囲が単語の先頭に移動することを確認する
       extension.cursorWordLeftSelect();
 
-      assert.deepStrictEqual(
+      assert.deepEqual(
         editor.selection.anchor,
         new vscode.Position(
           testCase.expected.selection.anchor.line,
@@ -301,7 +301,7 @@ suite("Extension Test Suite", () => {
         `testCase.testNumber(anchor): ${testCase.testNumber}`,
       );
 
-      assert.deepStrictEqual(
+      assert.deepEqual(
         editor.selection.active,
         new vscode.Position(
           testCase.expected.selection.active.line,
@@ -416,7 +416,7 @@ suite("Extension Test Suite", () => {
       // 選択範囲が単語の後ろに移動することを確認する
       extension.cursorWordEndRightSelect();
 
-      assert.deepStrictEqual(
+      assert.deepEqual(
         editor.selection.anchor,
         new vscode.Position(
           testCase.expected.selection.anchor.line,
@@ -425,7 +425,7 @@ suite("Extension Test Suite", () => {
         `testCase.testNumber(anchor): ${testCase.testNumber}`,
       );
 
-      assert.deepStrictEqual(
+      assert.deepEqual(
         editor.selection.active,
         new vscode.Position(
           testCase.expected.selection.active.line,
@@ -523,7 +523,7 @@ suite("Extension Test Suite", () => {
       // 選択範囲が単語の後ろに移動することを確認する
       await extension.deleteWordLeft();
 
-      assert.deepStrictEqual(
+      assert.deepEqual(
         editor.selection.anchor,
         new vscode.Position(
           testCase.expected.selection.anchor.line,
@@ -532,7 +532,7 @@ suite("Extension Test Suite", () => {
         `testCase.testNumber(anchor): ${testCase.testNumber}`,
       );
 
-      assert.deepStrictEqual(
+      assert.deepEqual(
         editor.selection.active,
         new vscode.Position(
           testCase.expected.selection.active.line,
@@ -630,7 +630,7 @@ suite("Extension Test Suite", () => {
       // 選択範囲が単語の後ろに移動することを確認する
       await extension.deleteWordRight();
 
-      assert.deepStrictEqual(
+      assert.deepEqual(
         editor.selection.anchor,
         new vscode.Position(
           testCase.expected.selection.anchor.line,
@@ -639,7 +639,7 @@ suite("Extension Test Suite", () => {
         `testCase.testNumber(anchor): ${testCase.testNumber}`,
       );
 
-      assert.deepStrictEqual(
+      assert.deepEqual(
         editor.selection.active,
         new vscode.Position(
           testCase.expected.selection.active.line,
@@ -692,7 +692,7 @@ suite("Extension Test Suite", () => {
 
   test("splitBySpace", () => {
     // スペースで分割されるか確認する
-    assert.deepStrictEqual(extension.splitBySpace([" a b c "]), [
+    assert.deepEqual(extension.splitBySpace([" a b c "]), [
       " ",
       "a",
       " ",
@@ -703,7 +703,7 @@ suite("Extension Test Suite", () => {
     ]);
 
     // スペースで分割されるか確認する
-    assert.deepStrictEqual(extension.splitBySpace([" a", "b", "c"]), [
+    assert.deepEqual(extension.splitBySpace([" a", "b", "c"]), [
       " ",
       "a",
       "b",
@@ -711,7 +711,7 @@ suite("Extension Test Suite", () => {
     ]);
 
     // スペースで分割されるか確認する
-    assert.deepStrictEqual(extension.splitBySpace(["a ", "b", "c"]), [
+    assert.deepEqual(extension.splitBySpace(["a ", "b", "c"]), [
       "a",
       " ",
       "b",
@@ -719,7 +719,7 @@ suite("Extension Test Suite", () => {
     ]);
 
     // スペースで分割されるか確認する
-    assert.deepStrictEqual(extension.splitBySpace(["a", " b", "c"]), [
+    assert.deepEqual(extension.splitBySpace(["a", " b", "c"]), [
       "a",
       " ",
       "b",
@@ -727,7 +727,7 @@ suite("Extension Test Suite", () => {
     ]);
 
     // スペースで分割されるか確認する
-    assert.deepStrictEqual(extension.splitBySpace(["a", "b ", "c"]), [
+    assert.deepEqual(extension.splitBySpace(["a", "b ", "c"]), [
       "a",
       "b",
       " ",
@@ -735,7 +735,7 @@ suite("Extension Test Suite", () => {
     ]);
 
     // スペースで分割されるか確認する
-    assert.deepStrictEqual(extension.splitBySpace(["a", "b", " c"]), [
+    assert.deepEqual(extension.splitBySpace(["a", "b", " c"]), [
       "a",
       "b",
       " ",
@@ -743,7 +743,7 @@ suite("Extension Test Suite", () => {
     ]);
 
     // スペースで分割されるか確認する
-    assert.deepStrictEqual(extension.splitBySpace(["a", "b", "c "]), [
+    assert.deepEqual(extension.splitBySpace(["a", "b", "c "]), [
       "a",
       "b",
       "c",
@@ -751,7 +751,7 @@ suite("Extension Test Suite", () => {
     ]);
 
     // スペースで分割されるか確認する
-    assert.deepStrictEqual(extension.splitBySpace(["a", " b ", "c"]), [
+    assert.deepEqual(extension.splitBySpace(["a", " b ", "c"]), [
       "a",
       " ",
       "b",
@@ -760,7 +760,7 @@ suite("Extension Test Suite", () => {
     ]);
 
     // スペースで分割されるか確認する
-    assert.deepStrictEqual(extension.splitBySpace(["a ", "  b", "c"]), [
+    assert.deepEqual(extension.splitBySpace(["a ", "  b", "c"]), [
       "a",
       "   ",
       "b",
@@ -768,7 +768,7 @@ suite("Extension Test Suite", () => {
     ]);
 
     // タブで分割されるか確認する
-    assert.deepStrictEqual(extension.splitBySpace(["a", "\t \tb", "c"]), [
+    assert.deepEqual(extension.splitBySpace(["a", "\t \tb", "c"]), [
       "a",
       "\t \t",
       "b",
@@ -778,13 +778,13 @@ suite("Extension Test Suite", () => {
 
   test("getWordSeparatorsRegExp", () => {
     // 区切り文字の正規表現が正しく生成されるか確認する
-    assert.deepStrictEqual(
+    assert.deepEqual(
       new RegExp("([\\.]+)", "g"),
       extension.getWordSeparatorsRegExp("."),
     );
 
     // 複数文字の区切り文字の正規表現が正しく生成されるか確認する
-    assert.deepStrictEqual(
+    assert.deepEqual(
       new RegExp("([\\.\\*]+)", "g"),
       extension.getWordSeparatorsRegExp(".*"),
     );
@@ -792,27 +792,27 @@ suite("Extension Test Suite", () => {
 
   test("combineConsecutiveElements", () => {
     // 連続した要素がまとめられることを確認する
-    assert.deepStrictEqual(
+    assert.deepEqual(
       extension.combineConsecutiveElements([".", "|"], /[\\.|!]+/),
       [".|"],
     );
 
-    assert.deepStrictEqual(
+    assert.deepEqual(
       extension.combineConsecutiveElements(["  ", " "], /^([\s]+)$/),
       ["   "],
     );
 
-    assert.deepStrictEqual(
+    assert.deepEqual(
       extension.combineConsecutiveElements(["\t", " ", "\t"], /^([\s]+)$/),
       ["\t \t"],
     );
 
-    assert.deepStrictEqual(
+    assert.deepEqual(
       extension.combineConsecutiveElements([".", "|", "!"], /[\\.|!]+/),
       [".|!"],
     );
 
-    assert.deepStrictEqual(
+    assert.deepEqual(
       extension.combineConsecutiveElements(
         ["a", ".", "|", "!", "b", "c"],
         /[(\\.|!)]+/,
@@ -835,7 +835,7 @@ suite("Extension Test Suite", () => {
         vscode.ConfigurationTarget.Global,
       );
 
-      assert.strictEqual(wordSeparators, extension.getWordSeparators());
+      assert.strictEqual(extension.getWordSeparators(), wordSeparators);
     }
   }).timeout("20s");
 
@@ -846,7 +846,7 @@ suite("Extension Test Suite", () => {
     await setDefaultWordSeparators();
 
     // 区切り文字で分割されることを確認する
-    assert.deepStrictEqual(extension.splitByWordSeparators(["a,", "b", "c"]), [
+    assert.deepEqual(extension.splitByWordSeparators(["a,", "b", "c"]), [
       "a",
       ",",
       "b",
@@ -854,7 +854,7 @@ suite("Extension Test Suite", () => {
     ]);
 
     // 区切り文字で分割されることを確認する
-    assert.deepStrictEqual(extension.splitByWordSeparators([".a", "b", "c"]), [
+    assert.deepEqual(extension.splitByWordSeparators([".a", "b", "c"]), [
       ".",
       "a",
       "b",
@@ -862,7 +862,7 @@ suite("Extension Test Suite", () => {
     ]);
 
     // 区切り文字が連続しているときに一つの要素にまとめられることを確認する
-    assert.deepStrictEqual(extension.splitByWordSeparators(["a.", "|b", "c"]), [
+    assert.deepEqual(extension.splitByWordSeparators(["a.", "|b", "c"]), [
       "a",
       ".|",
       "b",
@@ -870,15 +870,15 @@ suite("Extension Test Suite", () => {
     ]);
 
     // 区切り文字が連続しているときに一つの要素にまとめられることを確認する
-    assert.deepStrictEqual(
-      extension.splitByWordSeparators(["a.", "|", ".b", "c"]),
-      ["a", ".|.", "b", "c"],
-    );
+    assert.deepEqual(extension.splitByWordSeparators(["a.", "|", ".b", "c"]), [
+      "a",
+      ".|.",
+      "b",
+      "c",
+    ]);
 
     // 数値+英語でもつながっている場合はそのまま単語として認識されることを確認する
-    assert.deepStrictEqual(extension.splitByWordSeparators(["string1"]), [
-      "string1",
-    ]);
+    assert.deepEqual(extension.splitByWordSeparators(["string1"]), ["string1"]);
   }).timeout("20s");
 
   // vscodeの設定を変更・取得するのは時間がかかりデフォルトのタイムアウト時間では間に合わない場合がある
@@ -887,20 +887,20 @@ suite("Extension Test Suite", () => {
     const locale = "ja";
 
     // 単語で分割されることを確認する
-    assert.deepStrictEqual(extension.splitByWord(["単語で分割"], locale), [
+    assert.deepEqual(extension.splitByWord(["単語で分割"], locale), [
       "単語",
       "で",
       "分割",
     ]);
 
     // 複数の単語で分割されることを確認する
-    assert.deepStrictEqual(
+    assert.deepEqual(
       extension.splitByWord(["分かち書きは", "素晴らしい!"], locale),
       ["分かち書き", "は", "素晴らしい", "!"],
     );
 
     // 連結した英単語は分割されないことを確認する
-    assert.deepStrictEqual(
+    assert.deepEqual(
       ["concatenatedWords"],
       extension.splitByWord(["concatenatedWords"], locale),
     );
@@ -938,7 +938,7 @@ suite("Extension Test Suite", () => {
     // テストで用いる区切り文字を設定するためデフォルトのeditor.wordSeparatorsを設定する
     await setDefaultWordSeparators();
 
-    assert.deepStrictEqual(extension.splitByAll(["a b c"]), [
+    assert.deepEqual(extension.splitByAll(["a b c"]), [
       "a",
       " ",
       "b",
@@ -946,7 +946,7 @@ suite("Extension Test Suite", () => {
       "c",
     ]);
 
-    assert.deepStrictEqual(
+    assert.deepEqual(
       extension.splitByAll(["editor.wordSeparatorsで指定された文字で分割する"]),
       [
         "editor",
@@ -964,15 +964,15 @@ suite("Extension Test Suite", () => {
       ],
     );
 
-    assert.deepStrictEqual(["  ", "});"], extension.splitByAll(["  });"]));
+    assert.deepEqual(extension.splitByAll(["  });"]), ["  ", "});"]);
 
-    assert.deepStrictEqual(extension.splitByAll(["a\t", " ", "\tb"]), [
+    assert.deepEqual(extension.splitByAll(["a\t", " ", "\tb"]), [
       "a",
       "\t \t",
       "b",
     ]);
 
-    assert.deepStrictEqual(extension.splitByAll(["string1"]), ["string1"]);
+    assert.deepEqual(extension.splitByAll(["string1"]), ["string1"]);
   }).timeout("20s");
 
   test("wordLeftPosition", () => {
@@ -982,18 +982,18 @@ suite("Extension Test Suite", () => {
       { segment: "def", isWord: true },
     ];
 
-    assert.deepStrictEqual(extension.wordLeftCharacter(segments, 0), -1);
-    assert.deepStrictEqual(extension.wordLeftCharacter(segments, 1), 0);
-    assert.deepStrictEqual(extension.wordLeftCharacter(segments, 2), 0);
-    assert.deepStrictEqual(extension.wordLeftCharacter(segments, 3), 0);
+    assert.deepEqual(extension.wordLeftCharacter(segments, 0), -1);
+    assert.deepEqual(extension.wordLeftCharacter(segments, 1), 0);
+    assert.deepEqual(extension.wordLeftCharacter(segments, 2), 0);
+    assert.deepEqual(extension.wordLeftCharacter(segments, 3), 0);
 
-    assert.deepStrictEqual(extension.wordLeftCharacter(segments, 4), 0);
-    assert.deepStrictEqual(extension.wordLeftCharacter(segments, 5), 4);
-    assert.deepStrictEqual(extension.wordLeftCharacter(segments, 6), 4);
-    assert.deepStrictEqual(extension.wordLeftCharacter(segments, 7), 4);
+    assert.deepEqual(extension.wordLeftCharacter(segments, 4), 0);
+    assert.deepEqual(extension.wordLeftCharacter(segments, 5), 4);
+    assert.deepEqual(extension.wordLeftCharacter(segments, 6), 4);
+    assert.deepEqual(extension.wordLeftCharacter(segments, 7), 4);
 
     // 空行の場合は-1を返すことの確認
-    assert.deepStrictEqual(extension.wordLeftCharacter([], 0), -1);
+    assert.deepEqual(extension.wordLeftCharacter([], 0), -1);
   });
 
   test("wordEndRightPosition", () => {
@@ -1006,40 +1006,40 @@ suite("Extension Test Suite", () => {
     ];
 
     // "abc"
-    assert.deepStrictEqual(extension.wordEndRightCharacter(segments, 0), 3);
-    assert.deepStrictEqual(extension.wordEndRightCharacter(segments, 1), 3);
-    assert.deepStrictEqual(extension.wordEndRightCharacter(segments, 2), 3);
+    assert.deepEqual(extension.wordEndRightCharacter(segments, 0), 3);
+    assert.deepEqual(extension.wordEndRightCharacter(segments, 1), 3);
+    assert.deepEqual(extension.wordEndRightCharacter(segments, 2), 3);
 
     // "."
-    assert.deepStrictEqual(extension.wordEndRightCharacter(segments, 3), 4);
+    assert.deepEqual(extension.wordEndRightCharacter(segments, 3), 4);
 
     // " "
-    assert.deepStrictEqual(extension.wordEndRightCharacter(segments, 4), 8);
+    assert.deepEqual(extension.wordEndRightCharacter(segments, 4), 8);
 
     // "def"
-    assert.deepStrictEqual(extension.wordEndRightCharacter(segments, 5), 8);
-    assert.deepStrictEqual(extension.wordEndRightCharacter(segments, 6), 8);
-    assert.deepStrictEqual(extension.wordEndRightCharacter(segments, 7), 8);
-    assert.deepStrictEqual(extension.wordEndRightCharacter(segments, 8), 9);
+    assert.deepEqual(extension.wordEndRightCharacter(segments, 5), 8);
+    assert.deepEqual(extension.wordEndRightCharacter(segments, 6), 8);
+    assert.deepEqual(extension.wordEndRightCharacter(segments, 7), 8);
+    assert.deepEqual(extension.wordEndRightCharacter(segments, 8), 9);
 
     // " "
-    assert.deepStrictEqual(extension.wordEndRightCharacter(segments, 9), -1);
+    assert.deepEqual(extension.wordEndRightCharacter(segments, 9), -1);
 
     // 空行の場合は-1を返すことの確認
-    assert.deepStrictEqual(extension.wordEndRightCharacter([], 0), -1, "empty");
+    assert.deepEqual(extension.wordEndRightCharacter([], 0), -1, "empty");
   });
 
   test("stringToSegments", async () => {
     // テストで用いる区切り文字を設定するためデフォルトのeditor.wordSeparatorsを設定する
     await setDefaultWordSeparators();
 
-    assert.deepStrictEqual(extension.stringToSegments(["abc", " ", "def"], 1), [
+    assert.deepEqual(extension.stringToSegments(["abc", " ", "def"], 1), [
       { segment: "abc", isWord: true },
       { segment: " ", isWord: false },
       { segment: "def", isWord: true },
     ]);
 
-    assert.deepStrictEqual(
+    assert.deepEqual(
       extension.stringToSegments(
         ["abc", "!", "def"],
         extension.PURPOSE.selectLeft,
@@ -1051,7 +1051,7 @@ suite("Extension Test Suite", () => {
       ],
     );
 
-    assert.deepStrictEqual(
+    assert.deepEqual(
       extension.stringToSegments(
         ["abc", "!", " ", "def"],
         extension.PURPOSE.selectLeft,
@@ -1064,7 +1064,7 @@ suite("Extension Test Suite", () => {
       ],
     );
 
-    assert.deepStrictEqual(
+    assert.deepEqual(
       extension.stringToSegments(
         ["abc", "!", " ", "def"],
         extension.PURPOSE.selectRight,
@@ -1077,7 +1077,7 @@ suite("Extension Test Suite", () => {
       ],
     );
 
-    assert.deepStrictEqual(
+    assert.deepEqual(
       extension.stringToSegments(
         ["abc", "!/", " ", "def"],
         extension.PURPOSE.selectLeft,
@@ -1090,7 +1090,7 @@ suite("Extension Test Suite", () => {
       ],
     );
 
-    assert.deepStrictEqual(
+    assert.deepEqual(
       extension.stringToSegments(
         ["abc", "!/", "def"],
         extension.PURPOSE.selectRight,
@@ -1102,7 +1102,7 @@ suite("Extension Test Suite", () => {
       ],
     );
 
-    assert.deepStrictEqual(
+    assert.deepEqual(
       extension.stringToSegments(
         ["abc", " ", "!", " ", "def"],
         extension.PURPOSE.selectLeft,
@@ -1116,7 +1116,7 @@ suite("Extension Test Suite", () => {
       ],
     );
 
-    assert.deepStrictEqual(
+    assert.deepEqual(
       extension.stringToSegments(["abc", "!", "def"], extension.PURPOSE.delete),
       [
         { segment: "abc", isWord: true },
@@ -1125,7 +1125,7 @@ suite("Extension Test Suite", () => {
       ],
     );
 
-    assert.deepStrictEqual(
+    assert.deepEqual(
       extension.stringToSegments(["abc", " ", "def"], extension.PURPOSE.delete),
       [
         { segment: "abc", isWord: true },
@@ -1134,7 +1134,7 @@ suite("Extension Test Suite", () => {
       ],
     );
 
-    assert.deepStrictEqual(
+    assert.deepEqual(
       extension.stringToSegments(
         ["abc", "  ", "def"],
         extension.PURPOSE.delete,
@@ -1146,7 +1146,7 @@ suite("Extension Test Suite", () => {
       ],
     );
 
-    assert.deepStrictEqual(
+    assert.deepEqual(
       extension.stringToSegments(
         ["abc", "\t\t", "def"],
         extension.PURPOSE.delete,
@@ -1158,7 +1158,7 @@ suite("Extension Test Suite", () => {
       ],
     );
 
-    assert.deepStrictEqual(
+    assert.deepEqual(
       extension.stringToSegments(["-", "1"], extension.PURPOSE.selectLeft),
       [
         { segment: "-", isWord: false },
