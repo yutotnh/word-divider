@@ -1,0 +1,4 @@
+{
+  "wordDivider.locale": "Sets the locale for recognizing words in a sentence. Defaults to use VS Code's locale.",
+  "wordDivider.locale.auto": "Use VS Code's configured display language"
+}

@@ -81,12 +81,12 @@
             "zh-TW"
           ],
           "enumDescriptions": [
-            "Use VS Code's configured display language",
+            "%wordDivider.locale.auto%",
             "日本語",
             "中文(简体)",
             "中文(繁體)"
           ],
-          "description": "Sets the locale for recognizing words in a sentence."
+          "description": "%wordDivider.locale%"
         }
       }
     }

@@ -1,0 +1,4 @@
+{
+  "wordDivider.locale": "设置用于识别句子中单词的区域设置。默认使用 VS Code 的区域设置。",
+  "wordDivider.locale.auto": "使用 VS Code 配置的显示语言"
+}

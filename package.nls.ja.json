@@ -1,0 +1,4 @@
+{
+  "wordDivider.locale": "文中の単語を認識するロケールを設定します。既定では VS Code のロケールを使用します。",
+  "wordDivider.locale.auto": "VS Codeの構成済みの表示言語を使用します。"
+}
