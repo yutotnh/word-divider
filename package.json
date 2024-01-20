@@ -93,6 +93,7 @@
     }
   },
   "scripts": {
+    "vscode:prepublish": "yarn run package-web",
     "vscode:package": "vsce package",
     "vscode:publish": "vsce publish",
     "test": "yarn run tsc -p . --outDir out && yarn run vscode-test",
