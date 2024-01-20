@@ -12,27 +12,27 @@ export function activate(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(
     vscode.commands.registerCommand(
-      "word-divider.cursorWordLeft",
+      "wordDivider.cursorWordLeft",
       cursorWordLeft,
     ),
     vscode.commands.registerCommand(
-      "word-divider.cursorWordEndRight",
+      "wordDivider.cursorWordEndRight",
       cursorWordEndRight,
     ),
     vscode.commands.registerCommand(
-      "word-divider.cursorWordLeftSelect",
+      "wordDivider.cursorWordLeftSelect",
       cursorWordLeftSelect,
     ),
     vscode.commands.registerCommand(
-      "word-divider.cursorWordEndRightSelect",
+      "wordDivider.cursorWordEndRightSelect",
       cursorWordEndRightSelect,
     ),
     vscode.commands.registerCommand(
-      "word-divider.deleteWordLeft",
+      "wordDivider.deleteWordLeft",
       deleteWordLeft,
     ),
     vscode.commands.registerCommand(
-      "word-divider.deleteWordRight",
+      "wordDivider.deleteWordRight",
       deleteWordRight,
     ),
   );
@@ -613,8 +613,8 @@ export function combineConsecutiveElements(strings: string[], pattern: RegExp) {
  * @returns 単語で分割した文字列の配列
  * @todo  Intl.Segmenterのlocaleを指定できるようにする
  */
-export function splitByWord(strings: string[]) {
-  const segmenter = new Intl.Segmenter("ja", { granularity: "word" });
+export function splitByWord(strings: string[], locale: string) {
+  const segmenter = new Intl.Segmenter(locale, { granularity: "word" });
 
   const result: string[] = [];
 
@@ -630,6 +630,44 @@ export function splitByWord(strings: string[]) {
 }
 
 /**
+ * 単語を認識するためのlocaleを取得する
+ * - wordDivider.locale が文字列でない場合や取得できない場合は"ja"を返す
+ * @returns locale
+ */
+export function readWordDivideLocale() {
+  const config = vscode.workspace.getConfiguration("wordDivider");
+  let locale = config.get<string>("locale", "auto");
+
+  /**
+   * 警告を出力し、localeをjaにする
+   * 日本語なのは開発者が日本人だから
+   */
+  const setDefaultLocale = () => {
+    locale = "ja";
+    logOutputChannel.warn(
+      `Could not get wordDivider.locale. Continue processing as wordDivider.locale="${locale}".`,
+    );
+  };
+
+  if (locale === "auto") {
+    locale = vscode.env.language;
+  }
+
+  try {
+    const supportedLocale = Intl.Segmenter.supportedLocalesOf(locale);
+
+    if (supportedLocale.length === 0) {
+      // 本当はここでthrowして、catchで処理をしたいが、throwするとなぜかcathされないので関数にして処理をまとめている
+      setDefaultLocale();
+    }
+  } catch (error) {
+    setDefaultLocale();
+  }
+
+  return locale;
+}
+
+/**
  * 文字列を分割する
  * - editor.wordSeparators で指定された文字で分割する
  * - スペースで分割する
@@ -640,7 +678,7 @@ export function splitByWord(strings: string[]) {
 export function splitByAll(strings: string[]) {
   let result = splitByWordSeparators(strings);
   result = splitBySpace(result);
-  result = splitByWord(result);
+  result = splitByWord(result, readWordDivideLocale());
 
   // SplitByWord()を実行した後に、記号が分割されてしまうので、記号をまとめる
   // 入力: ["a", ".", ".", "b", "!", "?", "c"]

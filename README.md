@@ -10,20 +10,20 @@
 [![Dependency Review](https://github.com/yutotnh/word-divider/actions/workflows/dependency-review.yml/badge.svg)](https://github.com/yutotnh/word-divider/actions/workflows/dependency-review.yml)
 [![Dev Containers](https://github.com/yutotnh/word-divider/actions/workflows/devcontainer.yml/badge.svg)](https://github.com/yutotnh/word-divider/actions/workflows/devcontainer.yml)
 
-Enable cursor movement in Japanese sentences on a word-by-word basis.
+Enable cursor movement in Japanese and Chinese sentences on a word-by-word basis.
 
 ![examples](./docs/examples.gif)
 
 ## Features
 
-| Command                               | Keybinding for Windows and Linux | Keybinding for Mac | Command to be overwritten | Description                      |
-| ------------------------------------- | -------------------------------- | ------------------ | ------------------------- | -------------------------------- |
-| word-divider.cursorWordLeft           | `Ctrl`+`LeftArrow`               | `⌥` `←`            | cursorWordLeft            | Move cursor to the previous word |
-| word-divider.cursorWordEndRight       | `Ctrl`+`RightArrow`              | `⌥` `→`            | cursorWordEndRight        | Move cursor to the next word     |
-| word-divider.cursorWordLeftSelect     | `Ctrl`+`Shift`+`LeftArrow`       | `⇧` `⌥` `←`        | cursorWordLeftSelect      | Select the previous word         |
-| word-divider.cursorWordEndRightSelect | `Ctrl`+`Shift`+`RightArrow`      | `⇧` `⌥` `→`        | cursorWordEndRightSelect  | Select the next word             |
-| word-divider.deleteWordLeft           | `Ctrl`+`Backspace`               | `⌥` `Backspace`    | deleteWordLeft            | Remove the previous word         |
-| word-divider.deleteWordEndRight       | `Ctrl`+`Delete`                  | `⌥` `Delete`       | deleteWordRight           | Remove the next word             |
+| Command                              | Keybinding for Windows and Linux | Keybinding for Mac | Command to be overwritten | Description                      |
+| ------------------------------------ | -------------------------------- | ------------------ | ------------------------- | -------------------------------- |
+| wordDivider.cursorWordLeft           | `Ctrl`+`LeftArrow`               | `⌥` `←`            | cursorWordLeft            | Move cursor to the previous word |
+| wordDivider.cursorWordEndRight       | `Ctrl`+`RightArrow`              | `⌥` `→`            | cursorWordEndRight        | Move cursor to the next word     |
+| wordDivider.cursorWordLeftSelect     | `Ctrl`+`Shift`+`LeftArrow`       | `⇧` `⌥` `←`        | cursorWordLeftSelect      | Select the previous word         |
+| wordDivider.cursorWordEndRightSelect | `Ctrl`+`Shift`+`RightArrow`      | `⇧` `⌥` `→`        | cursorWordEndRightSelect  | Select the next word             |
+| wordDivider.deleteWordLeft           | `Ctrl`+`Backspace`               | `⌥` `Backspace`    | deleteWordLeft            | Remove the previous word         |
+| wordDivider.deleteWordEndRight       | `Ctrl`+`Delete`                  | `⌥` `Delete`       | deleteWordRight           | Remove the next word             |
 
 ## Differences from Japanese Word Handler
 
@@ -43,7 +43,11 @@ While Word Divider divides `拡張機能` into `拡張` and `機能`, and `使�
 
 ## Extension Settings
 
-none
+- `wordDivider.locale`: The locale to use for word divider
+  - `auto`: Use VS Code's configured display language (default)
+  - `ja`: Japanese
+  - `zh-CN`: Simplified Chinese
+  - `zh-TW`: Traditional Chinese
 
 ## Known Issues
 

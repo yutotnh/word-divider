@@ -21,53 +21,75 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:word-divider.cursorWordLeft",
-    "onCommand:word-divider.cursorWordEndRight",
-    "onCommand:word-divider.cursorWordLeftSelect",
-    "onCommand:word-divider.cursorWordEndRightSelect",
-    "onCommand:word-divider.deleteWordLeft",
-    "onCommand:word-divider.deleteWordRight"
+    "onCommand:wordDivider.cursorWordLeft",
+    "onCommand:wordDivider.cursorWordEndRight",
+    "onCommand:wordDivider.cursorWordLeftSelect",
+    "onCommand:wordDivider.cursorWordEndRightSelect",
+    "onCommand:wordDivider.deleteWordLeft",
+    "onCommand:wordDivider.deleteWordRight"
   ],
   "main": "./dist/extension.js",
   "contributes": {
     "keybindings": [
       {
-        "command": "word-divider.cursorWordLeft",
+        "command": "wordDivider.cursorWordLeft",
         "key": "ctrl+left",
         "mac": "alt+left",
         "when": "editorTextFocus && !accessibilityModeEnabled"
       },
       {
-        "command": "word-divider.cursorWordEndRight",
+        "command": "wordDivider.cursorWordEndRight",
         "key": "ctrl+right",
         "mac": "alt+right",
         "when": "editorTextFocus && !accessibilityModeEnabled"
       },
       {
-        "command": "word-divider.cursorWordLeftSelect",
+        "command": "wordDivider.cursorWordLeftSelect",
         "key": "ctrl+shift+left",
         "mac": "shift+alt+left",
         "when": "editorTextFocus && !accessibilityModeEnabled"
       },
       {
-        "command": "word-divider.cursorWordEndRightSelect",
+        "command": "wordDivider.cursorWordEndRightSelect",
         "key": "ctrl+shift+right",
         "mac": "shift+alt+right",
         "when": "editorTextFocus && !accessibilityModeEnabled"
       },
       {
-        "command": "word-divider.deleteWordLeft",
+        "command": "wordDivider.deleteWordLeft",
         "key": "ctrl+backspace",
         "mac": "alt+backspace",
         "when": "editorTextFocus && !editorReadonly"
       },
       {
-        "command": "word-divider.deleteWordRight",
+        "command": "wordDivider.deleteWordRight",
         "key": "ctrl+delete",
         "mac": "alt+delete",
         "when": "editorTextFocus && !editorReadonly"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "Word Divider",
+      "properties": {
+        "wordDivider.locale": {
+          "type": "string",
+          "default": "auto",
+          "enum": [
+            "auto",
+            "ja",
+            "zh-CN",
+            "zh-TW"
+          ],
+          "enumDescriptions": [
+            "%wordDivider.locale.auto%",
+            "日本語",
+            "中文(简体)",
+            "中文(繁體)"
+          ],
+          "description": "%wordDivider.locale%"
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "yarn run package",
