@@ -37,9 +37,9 @@ Japanese Word Handler move based on character type, while Word Divider move base
 
 ### Using Japanese Word Handler
 
-While Word Divider divides `拡張機能` into `拡張` and `機能`, and `使うと` into `使う` and `と`, we can see that the Japanese word handler treats `拡張機能` as `拡張機能` and `使うと` as `使` and `と`.
+While Word Divider divides `拡張機能` into `拡張` and `機能`, and `使うと` into `使う` and `と`, we can see that the Japanese Word Handler treats `拡張機能` as `拡張機能` and `使うと` as `使` and `と`.
 
-![japanese word handler examples](./docs/examples-japanese-word-handler.gif)
+![Japanese Word Handler examples](./docs/examples-japanese-word-handler.gif)
 
 ## Extension Settings
 
