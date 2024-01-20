@@ -433,6 +433,7 @@ export function stringToSegments(strings: string[], purpose: Purpose) {
   const spaceOnlyRegExp = /^[\s]+$/;
 
   for (let i = 0; i < strings.length; i++) {
+    // eslint-disable-next-line security/detect-object-injection
     const string = strings[i];
 
     // 空白文字のみの要素はisWord=false
@@ -522,6 +523,7 @@ export function getWordSeparatorsRegExp(wordSeparators: string) {
 
   wordSeparatorsRegExp += "]+)";
 
+  // eslint-disable-next-line security/detect-non-literal-regexp
   return new RegExp(wordSeparatorsRegExp, "g");
 }
 
@@ -556,6 +558,7 @@ export function splitByWordSeparators(strings: string[]) {
   // 期待: ["a", "..", "b", "!?", "c"]
   result = combineConsecutiveElements(
     result,
+    // eslint-disable-next-line security/detect-non-literal-regexp
     new RegExp(wordSeparatorsRegExp.source),
   );
 
@@ -589,8 +592,10 @@ export function splitBySpace(strings: string[]) {
  */
 export function combineConsecutiveElements(strings: string[], pattern: RegExp) {
   for (let i = 0; i < strings.length - 1; i++) {
+    // eslint-disable-next-line security/detect-object-injection
     if (pattern.test(strings[i])) {
       while (pattern.test(strings[i + 1])) {
+        // eslint-disable-next-line security/detect-object-injection
         strings[i] = strings[i] + strings[i + 1];
         strings.splice(i + 1, 1);
       }
@@ -684,6 +689,7 @@ export function splitByAll(strings: string[]) {
   result = combineConsecutiveElements(
     result,
     // globalフラグがついているとマッチしなくなるのでフラグを外す
+    // eslint-disable-next-line security/detect-non-literal-regexp
     new RegExp(wordSeparatorsRegExp.source),
   );
 
