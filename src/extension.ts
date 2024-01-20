@@ -12,27 +12,27 @@ export function activate(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(
     vscode.commands.registerCommand(
-      "word-divider.cursorWordLeft",
+      "wordDivider.cursorWordLeft",
       cursorWordLeft,
     ),
     vscode.commands.registerCommand(
-      "word-divider.cursorWordEndRight",
+      "wordDivider.cursorWordEndRight",
       cursorWordEndRight,
     ),
     vscode.commands.registerCommand(
-      "word-divider.cursorWordLeftSelect",
+      "wordDivider.cursorWordLeftSelect",
       cursorWordLeftSelect,
     ),
     vscode.commands.registerCommand(
-      "word-divider.cursorWordEndRightSelect",
+      "wordDivider.cursorWordEndRightSelect",
       cursorWordEndRightSelect,
     ),
     vscode.commands.registerCommand(
-      "word-divider.deleteWordLeft",
+      "wordDivider.deleteWordLeft",
       deleteWordLeft,
     ),
     vscode.commands.registerCommand(
-      "word-divider.deleteWordRight",
+      "wordDivider.deleteWordRight",
       deleteWordRight,
     ),
   );
