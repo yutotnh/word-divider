@@ -19,7 +19,7 @@ jobs:
       - run: yarn install
       - name: Spell check
         if: ${{ github.event_name == 'pull_request' }}
-        run: yarn cspell . | reviewdog -efm="%f:%l:%c - %m" -reporter=github-pr-review -filter-mode=nofilter -fail-on-error=true
+        run: yarn spellcheck | reviewdog -efm="%f:%l:%c - %m" -reporter=github-pr-review -filter-mode=nofilter -fail-on-error=true
         env:
           REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Spell check

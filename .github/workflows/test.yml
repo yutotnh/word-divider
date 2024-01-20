@@ -26,3 +26,21 @@ jobs:
         if: runner.os == 'Linux'
       - run: yarn test
         if: runner.os != 'Linux'
+
+  test-web:
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ./.node-version
+      - run: yarn install
+      - run: xvfb-run -a yarn test-web
+        if: runner.os == 'Linux'
+      - run: yarn test-web
+        if: runner.os != 'Linux'
