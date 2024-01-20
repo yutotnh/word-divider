@@ -17,4 +17,4 @@ jobs:
           node-version-file: ./.node-version
       - run: yarn install
       - name: Create package
-        run: yarn vsce package
+        run: yarn vscode:package
