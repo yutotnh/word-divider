@@ -27,7 +27,7 @@ jobs:
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
       - name: Create package
-        run: yarn vsce package
+        run: yarn vscode:package
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
