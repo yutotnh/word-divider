@@ -97,7 +97,7 @@
     "vscode:package": "vsce package",
     "vscode:publish": "vsce publish",
     "test": "yarn run tsc -p . --outDir out && yarn run vscode-test",
-    "test-web": "vscode-test-web --browserType=chromium --extensionDevelopmentPath=. --extensionTestsPath=dist/web/test/suite/index.js",
+    "test-web": "yarn run pretest && vscode-test-web --browserType=chromium --extensionDevelopmentPath=. --extensionTestsPath=dist/web/test/suite/index.js",
     "pretest": "yarn run compile-web",
     "compile-web": "webpack",
     "watch-web": "webpack --watch",
