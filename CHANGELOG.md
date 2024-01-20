@@ -6,6 +6,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+### Added
+
+- Suport Chinese. [#52](https://github.com/yutotnh/word-divider/issues/52)
+
 ### Fixed
 
 - Improve README image. [#49](https://github.com/yutotnh/word-divider/pull/49)

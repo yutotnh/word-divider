@@ -881,9 +881,13 @@ suite("Extension Test Suite", () => {
     ]);
   }).timeout("20s");
 
+  // vscodeの設定を変更・取得するのは時間がかかりデフォルトのタイムアウト時間では間に合わない場合がある
+  // そのため、確実にテストが完了するようにテストのタイムアウト時間を20sにする
   test("splitByWord", () => {
+    const locale = "ja";
+
     // 単語で分割されることを確認する
-    assert.deepStrictEqual(extension.splitByWord(["単語で分割"]), [
+    assert.deepStrictEqual(extension.splitByWord(["単語で分割"], locale), [
       "単語",
       "で",
       "分割",
@@ -891,15 +895,41 @@ suite("Extension Test Suite", () => {
 
     // 複数の単語で分割されることを確認する
     assert.deepStrictEqual(
-      extension.splitByWord(["分かち書きは", "素晴らしい!"]),
+      extension.splitByWord(["分かち書きは", "素晴らしい!"], locale),
       ["分かち書き", "は", "素晴らしい", "!"],
     );
 
     // 連結した英単語は分割されないことを確認する
     assert.deepStrictEqual(
       ["concatenatedWords"],
-      extension.splitByWord(["concatenatedWords"]),
+      extension.splitByWord(["concatenatedWords"], locale),
     );
+  }).timeout("20s");
+
+  test("readWordDivideLocale", async () => {
+    // デフォルトの言語が取得できることを確認する
+    const config = vscode.workspace.getConfiguration("wordDivider");
+    // 今の設定を保存しておき、テストが終わったら元に戻す
+    const locale = config.get<string>("locale", "auto");
+    await config.update("locale", "auto", vscode.ConfigurationTarget.Global);
+
+    // 多分デフォルトの言語はenなのでenが取得できることを確認する
+    assert.strictEqual(extension.readWordDivideLocale(), "en");
+
+    // 言語をjaに変更してjaが取得できることを確認する
+    await config.update("locale", "ja", vscode.ConfigurationTarget.Global);
+    assert.strictEqual(extension.readWordDivideLocale(), "ja");
+
+    // 言語をzh-CNに変更してzh-CNが取得できることを確認する
+    await config.update("locale", "zh-CN", vscode.ConfigurationTarget.Global);
+    assert.strictEqual(extension.readWordDivideLocale(), "zh-CN");
+
+    // 言語をzh-TWに変更してzh-TWが取得できることを確認する
+    await config.update("locale", "zh-TW", vscode.ConfigurationTarget.Global);
+    assert.strictEqual(extension.readWordDivideLocale(), "zh-TW");
+
+    // 言語を元に戻す
+    await config.update("locale", locale, vscode.ConfigurationTarget.Global);
   });
 
   // vscodeの設定を変更・取得するのは時間がかかりデフォルトのタイムアウト時間では間に合わない場合がある
