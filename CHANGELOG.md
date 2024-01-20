@@ -6,6 +6,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [0.2.0] - 2024-01-21
+
 ### Added
 
 - Support Web Extensions. [#2](https://github.com/yutotnh/word-divider/issues/2)
