@@ -835,7 +835,7 @@ suite("Extension Test Suite", () => {
         vscode.ConfigurationTarget.Global,
       );
 
-      assert.strictEqual(wordSeparators, extension.getWordSeparators());
+      assert.strictEqual(extension.getWordSeparators(), wordSeparators);
     }
   }).timeout("20s");
 
@@ -964,7 +964,7 @@ suite("Extension Test Suite", () => {
       ],
     );
 
-    assert.deepEqual(["  ", "});"], extension.splitByAll(["  });"]));
+    assert.deepEqual(extension.splitByAll(["  });"]), ["  ", "});"]);
 
     assert.deepEqual(extension.splitByAll(["a\t", " ", "\tb"]), [
       "a",
