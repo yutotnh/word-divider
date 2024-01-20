@@ -10,7 +10,7 @@
 [![Dependency Review](https://github.com/yutotnh/word-divider/actions/workflows/dependency-review.yml/badge.svg)](https://github.com/yutotnh/word-divider/actions/workflows/dependency-review.yml)
 [![Dev Containers](https://github.com/yutotnh/word-divider/actions/workflows/devcontainer.yml/badge.svg)](https://github.com/yutotnh/word-divider/actions/workflows/devcontainer.yml)
 
-Enable cursor movement in Japanese sentences on a word-by-word basis.
+Enable cursor movement in Japanese and Chinese sentences on a word-by-word basis.
 
 ![examples](./docs/examples.gif)
 
@@ -43,7 +43,11 @@ While Word Divider divides `拡張機能` into `拡張` and `機能`, and `使�
 
 ## Extension Settings
 
-none
+- `wordDivider.locale`: The locale to use for word divider
+  - `auto`: Use VS Code's configured display language (default)
+  - `ja`: Japanese
+  - `zh-CN`: Simplified Chinese
+  - `zh-TW`: Traditional Chinese
 
 ## Known Issues
 
