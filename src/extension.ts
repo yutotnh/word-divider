@@ -532,14 +532,7 @@ export function getWordSeparatorsRegExp(wordSeparators: string) {
  */
 export function getWordSeparators() {
   const config = vscode.workspace.getConfiguration("editor");
-  const wordSeparators = config.get("wordSeparators");
-
-  if (typeof wordSeparators !== "string") {
-    logOutputChannel.warn(
-      'Could not get editor.wordSeparators. Continue processing as editor.wordSeparators="".',
-    );
-    return "";
-  }
+  const wordSeparators = config.get<string>("wordSeparators", "");
 
   return wordSeparators;
 }
