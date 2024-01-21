@@ -417,6 +417,7 @@ export function wordForSelectionToNextFindMatch(
 
   let currentCharacter = 0;
   for (let i = 0; i < segments.length; i++) {
+    // eslint-disable-next-line security/detect-object-injection
     const segment = segments[i];
 
     currentCharacter += segment.segment.length;
