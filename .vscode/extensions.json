@@ -2,8 +2,12 @@
   // See http://go.microsoft.com/fwlink/?LinkId=827846
   // for the documentation about the extensions.json format
   "recommendations": [
-    "dbaeumer.vscode-eslint",
     "amodio.tsl-problem-matcher",
-    "ms-vscode.extension-test-runner"
+    "dbaeumer.vscode-eslint",
+    "editorconfig.editorconfig",
+    "esbenp.prettier-vscode",
+    "ms-azuretools.vscode-docker",
+    "ms-vscode.extension-test-runner",
+    "streetsidesoftware.code-spell-checker"
   ]
 }
