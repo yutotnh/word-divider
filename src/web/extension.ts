@@ -398,6 +398,48 @@ export function wordEndRightCharacter(segments: Segment[], character: number) {
   return currentCharacter;
 }
 
+/**
+ * 指定した位置から見た次の一致項目の位置を取得する
+ * - 次の一致項目の位置がない場合は[-1, -1]を返す
+ * - カーソルが丁度単語と単語の間にある場合は、次(右)の単語の先頭の位置を返す
+ * @param segments 文字列をSegmentに変換した配列
+ * @param character 位置
+ * @returns 次の一致項目の位置
+ * @todo カーソルが丁度単語と単語の間にある場合は、次(右)か前(左)のどの単語を返すのかを設定で変更できるようにしたい
+ */
+export function wordForSelectionToNextFindMatch(
+  segments: Segment[],
+  character: number,
+) {
+  if (segments.length === 0) {
+    return [-1, -1];
+  }
+
+  let currentCharacter = 0;
+  for (let i = 0; i < segments.length; i++) {
+    const segment = segments[i];
+
+    currentCharacter += segment.segment.length;
+
+    if (segment.isWord) {
+      if (
+        currentCharacter === character &&
+        i < segments.length - 1 &&
+        segments[i + 1].isWord
+      ) {
+        return [
+          currentCharacter,
+          currentCharacter + segments[i + 1].segment.length,
+        ];
+      } else if (character <= currentCharacter) {
+        return [currentCharacter - segment.segment.length, currentCharacter];
+      }
+    }
+  }
+
+  return [-1, -1];
+}
+
 interface Segment {
   segment: string;
   isWord: boolean;
@@ -407,6 +449,7 @@ export const PURPOSE = {
   selectRight: 0,
   selectLeft: 1,
   delete: 2,
+  selectToNextFindMatch: 3,
 } as const;
 type Purpose = (typeof PURPOSE)[keyof typeof PURPOSE];
 
@@ -419,6 +462,7 @@ type Purpose = (typeof PURPOSE)[keyof typeof PURPOSE];
  *   - ただし、purpose=PURPOSE.selectLeft の時は前が空白文字の場合はisWord=true
  *   - ただし、purpose=PURPOSE.delete     の時はisWord=true
  *   - ただし、purpose=PURPOSE.delete     の時は行の先頭に空白文字がある場合はその空白はisWord=true
+ * - purpose=selectToNextFindMatchの時はeditor.wordSeparators中の文字からなる要素は必ずisWord=false
  * - それ以外はisWord=true
  * @param strings
  * @returns Segmentの配列
@@ -457,6 +501,13 @@ export function stringToSegments(strings: string[], purpose: Purpose) {
     // 空白文字でもなく、editor.wordSeparators中の文字でもない要素はisWord=true
     if (!wordSeparatorsRegExp.test(string)) {
       segments.push({ segment: string, isWord: true });
+      continue;
+    }
+
+    if (purpose === PURPOSE.selectToNextFindMatch) {
+      // purpose=selectToNextFindMatchの時はeditor.wordSeparators中の文字からなる要素は必ずisWord=false
+      // ここまでくれば残りはeditor.wordSeparators中の文字からなる要素のみ
+      segments.push({ segment: string, isWord: false });
       continue;
     }
 
