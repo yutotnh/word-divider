@@ -129,7 +129,7 @@
     "@vscode/test-cli": "^0.0.4",
     "@vscode/test-electron": "^2.3.9",
     "@vscode/test-web": "^0.0.51",
-    "@vscode/vsce": "^2.22.0",
+    "@vscode/vsce": "^2.23.0",
     "assert": "^2.1.0",
     "cspell": "^8.3.2",
     "eslint": "^8.56.0",
