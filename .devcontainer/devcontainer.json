@@ -4,11 +4,11 @@
   "name": "Node.js & TypeScript",
   // Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
   "build": {
-    "dockerfile": "Dockerfile",
+    "dockerfile": "Dockerfile"
   },
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2": {},
-    "ghcr.io/dhoeric/features/act:1": {},
+    "ghcr.io/dhoeric/features/act:1": {}
   },
   "customizations": {
     "vscode": {
@@ -19,10 +19,10 @@
         "esbenp.prettier-vscode",
         "ms-azuretools.vscode-docker",
         "ms-vscode.extension-test-runner",
-        "streetsidesoftware.code-spell-checker",
-      ],
-    },
-  },
+        "streetsidesoftware.code-spell-checker"
+      ]
+    }
+  }
 
   // Features to add to the dev container. More info: https://containers.dev/features.
   // "features": {},
