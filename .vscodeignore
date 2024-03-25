@@ -19,5 +19,6 @@ webpack.config.js
 **/.prettierrc
 **/.prettierignore
 **/.node-version
+dist/web/test/**
 docs/**
 !docs/icon.png
