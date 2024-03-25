@@ -6,6 +6,12 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [0.2.1] - 2024-03-26
+
+### Fixed
+
+- Reduce storage capacity of VSIX packages. [#107](https://github.com/yutotnh/word-divider/pull/107)
+
 ## [0.2.0] - 2024-01-21
 
 ### Added
