@@ -10,6 +10,7 @@ permissions:
 
 jobs:
   test:
+    name: Test
     strategy:
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
@@ -28,6 +29,7 @@ jobs:
         if: runner.os != 'Linux'
 
   test-web:
+    name: Test Web
     strategy:
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
