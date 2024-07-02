@@ -12,6 +12,7 @@ jobs:
   test:
     uses: ./.github/workflows/test.yml
   publish:
+    name: Publish
     needs: test
     runs-on: ubuntu-latest
     steps:
