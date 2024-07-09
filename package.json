@@ -131,7 +131,7 @@
     "@vscode/test-web": "^0.0.56",
     "@vscode/vsce": "^2.29.0",
     "assert": "^2.1.0",
-    "cspell": "^8.10.0",
+    "cspell": "^8.10.4",
     "eslint": "^8.57.0",
     "eslint-plugin-security": "^3.0.1",
     "mocha": "^10.6.0",
