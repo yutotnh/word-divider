@@ -128,7 +128,7 @@
     "@typescript-eslint/parser": "^7.18.0",
     "@vscode/test-cli": "^0.0.10",
     "@vscode/test-electron": "^2.4.1",
-    "@vscode/test-web": "^0.0.56",
+    "@vscode/test-web": "^0.0.57",
     "@vscode/vsce": "^3.0.0",
     "assert": "^2.1.0",
     "cspell": "^8.14.2",
