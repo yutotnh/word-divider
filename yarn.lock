@@ -634,16 +634,14 @@
   dependencies:
     vary "^1.1.2"
 
-"@koa/router@^12.0.1":
-  version "12.0.1"
-  resolved "https://registry.yarnpkg.com/@koa/router/-/router-12.0.1.tgz#1a66f92a630c02832cf5bbf0db06c9e53e423468"
-  integrity sha512-ribfPYfHb+Uw3b27Eiw6NPqjhIhTpVFzEWLwyc/1Xp+DCdwRRyIlAUODX+9bPARF6aQtUu1+/PHzdNvRzcs/+Q==
+"@koa/router@^13.0.0":
+  version "13.0.0"
+  resolved "https://registry.yarnpkg.com/@koa/router/-/router-13.0.0.tgz#66abdb6df583fb10e057ab27443c669078d49dc2"
+  integrity sha512-P278xb5IoLtDn2inRsCzJVKGxt5RkjOivwxGbniMO1sI8bft1/Dr93UsRP5aByT8C74x8zqxDYyPXrQwRKIhjg==
   dependencies:
-    debug "^4.3.4"
     http-errors "^2.0.0"
     koa-compose "^4.1.0"
-    methods "^1.1.2"
-    path-to-regexp "^6.2.1"
+    path-to-regexp "^6.2.2"
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
@@ -671,12 +669,12 @@
   resolved "https://registry.yarnpkg.com/@pkgjs/parseargs/-/parseargs-0.11.0.tgz#a77ea742fab25775145434eb1d2328cf5013ac33"
   integrity sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==
 
-"@playwright/browser-chromium@^1.45.0":
-  version "1.45.0"
-  resolved "https://registry.yarnpkg.com/@playwright/browser-chromium/-/browser-chromium-1.45.0.tgz#a3fc02e1d8e9ec3518b8c0fc6453ea74785bf3d1"
-  integrity sha512-yZxAsaxvn60VEPaPghYuL7xC78f994QdkJ3PtPZKozKctsIkT60GiDjjemwJKvWVgo/Z4v/hjim4okLKMIRkEw==
+"@playwright/browser-chromium@^1.46.1":
+  version "1.46.1"
+  resolved "https://registry.yarnpkg.com/@playwright/browser-chromium/-/browser-chromium-1.46.1.tgz#2452824016c42326ef6487effe859348fa309e59"
+  integrity sha512-KF+I9NRC00OU07n7iUruEfcCBIEtXGZPkhiWpnmxE/MbyXjveQlcOQBViv/a1DUXDa3ccK2Jcbqa6YMSV/pYVQ==
   dependencies:
-    playwright-core "1.45.0"
+    playwright-core "1.46.1"
 
 "@types/assert@^1.5.10":
   version "1.5.10"
@@ -832,24 +830,24 @@
     ora "^7.0.1"
     semver "^7.6.2"
 
-"@vscode/test-web@^0.0.56":
-  version "0.0.56"
-  resolved "https://registry.yarnpkg.com/@vscode/test-web/-/test-web-0.0.56.tgz#963b6e1bfa6d5b4b600083e328ee8d28890108eb"
-  integrity sha512-lR688n+D6A9odw+IZ5cU8CYr2YXLB61bGgyZpPVJe/sJy4/DYX5CAxPb7Wj9ZMYL41CTvWq5DeXtfCjlabPcYA==
+"@vscode/test-web@^0.0.57":
+  version "0.0.57"
+  resolved "https://registry.yarnpkg.com/@vscode/test-web/-/test-web-0.0.57.tgz#e5783fa968476d9fa841b915f6e697396f6249ac"
+  integrity sha512-jlvUdvEZEhbmd+YZ7u4mzC6K7mVnwBmZkP2tv4SAiXXYRYLfdLZ2DnYrnNzQv3zFki5IKXGWSlBMNPj35iP+bw==
   dependencies:
     "@koa/cors" "^5.0.0"
-    "@koa/router" "^12.0.1"
-    "@playwright/browser-chromium" "^1.45.0"
-    glob "^10.4.2"
+    "@koa/router" "^13.0.0"
+    "@playwright/browser-chromium" "^1.46.1"
+    glob "^11.0.0"
     gunzip-maybe "^1.4.2"
     http-proxy-agent "^7.0.2"
-    https-proxy-agent "^7.0.4"
+    https-proxy-agent "^7.0.5"
     koa "^2.15.3"
     koa-morgan "^1.0.1"
     koa-mount "^4.0.0"
     koa-static "^5.0.0"
     minimist "^1.2.8"
-    playwright "^1.45.0"
+    playwright "^1.46.1"
     tar-fs "^3.0.6"
     vscode-uri "^3.0.8"
 
@@ -2430,7 +2428,7 @@ glob-to-regexp@^0.4.1:
   resolved "https://registry.yarnpkg.com/glob-to-regexp/-/glob-to-regexp-0.4.1.tgz#c75297087c851b9a578bd217dd59a92f59fe546e"
   integrity sha512-lkX1HJXwyMcprw/5YUZc2s7DrpAiHB21/V+E1rHUrVNokkvB6bqMzT0VfV6/86ZNabt1k14YOIaT7nDvOX3Iiw==
 
-glob@^10.3.10, glob@^10.4.2:
+glob@^10.3.10:
   version "10.4.5"
   resolved "https://registry.yarnpkg.com/glob/-/glob-10.4.5.tgz#f4d9f0b90ffdbab09c9d77f5f29b4262517b0956"
   integrity sha512-7Bv8RF0k6xjo7d4A/PxYLbUCfb6c+Vpd2/mB2yRDlew7Jb5hEXiCD9ibfO7wpk8i4sevK6DFny9h7EYbM3/sHg==
@@ -2653,7 +2651,7 @@ http-proxy-agent@^7.0.0, http-proxy-agent@^7.0.2:
     agent-base "^7.1.0"
     debug "^4.3.4"
 
-https-proxy-agent@^7.0.0, https-proxy-agent@^7.0.4, https-proxy-agent@^7.0.5:
+https-proxy-agent@^7.0.0, https-proxy-agent@^7.0.5:
   version "7.0.5"
   resolved "https://registry.yarnpkg.com/https-proxy-agent/-/https-proxy-agent-7.0.5.tgz#9e8b5013873299e11fab6fd548405da2d6c602b2"
   integrity sha512-1e4Wqeblerz+tMKPIq2EMGiiWW1dIjZOksyHWSUm1rmuvw/how9hBHZ38lAGj5ID4Ik6EdkOw7NmWPy6LAwalw==
@@ -3274,11 +3272,6 @@ merge2@^1.3.0, merge2@^1.4.1:
   resolved "https://registry.yarnpkg.com/merge2/-/merge2-1.4.1.tgz#4368892f885e907455a6fd7dc55c0c9d404990ae"
   integrity sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==
 
-methods@^1.1.2:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/methods/-/methods-1.1.2.tgz#5529a4d67654134edcc5266656835b0f851afcee"
-  integrity sha512-iclAHeNqNm68zFtnZ0e+1L2yUIdvzNoauKU4WBA3VvH/vPFieF7qfRlwUZU+DA9P9bPXIS90ulxoUoCH23sV2w==
-
 micromatch@^4.0.0, micromatch@^4.0.4, micromatch@^4.0.7:
   version "4.0.8"
   resolved "https://registry.yarnpkg.com/micromatch/-/micromatch-4.0.8.tgz#d66fa18f3a47076789320b9b1af32bd86d9fa202"
@@ -3695,10 +3688,10 @@ path-scurry@^2.0.0:
     lru-cache "^11.0.0"
     minipass "^7.1.2"
 
-path-to-regexp@^6.2.1:
-  version "6.2.1"
-  resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-6.2.1.tgz#d54934d6798eb9e5ef14e7af7962c945906918e5"
-  integrity sha512-JLyh7xT1kizaEvcaXOQwOc2/Yhw6KZOvPf1S8401UyLk86CU79LN3vl7ztXGm/pZ+YjoyAJ4rxmHwbkBXJX+yw==
+path-to-regexp@^6.2.2:
+  version "6.2.2"
+  resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-6.2.2.tgz#324377a83e5049cbecadc5554d6a63a9a4866b36"
+  integrity sha512-GQX3SSMokngb36+whdpRXE+3f9V8UzyAorlYvOGx87ufGHehNTn5lCxrKtLyZ4Yl/wEKnNnr98ZzOwwDZV5ogw==
 
 path-type@^4.0.0:
   version "4.0.0"
@@ -3736,17 +3729,17 @@ pkg-dir@^4.2.0:
   dependencies:
     find-up "^4.0.0"
 
-playwright-core@1.45.0:
-  version "1.45.0"
-  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.45.0.tgz#5741a670b7c9060ce06852c0051d84736fb94edc"
-  integrity sha512-lZmHlFQ0VYSpAs43dRq1/nJ9G/6SiTI7VPqidld9TDefL9tX87bTKExWZZUF5PeRyqtXqd8fQi2qmfIedkwsNQ==
+playwright-core@1.46.1:
+  version "1.46.1"
+  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.46.1.tgz#28f3ab35312135dda75b0c92a3e5c0e7edb9cc8b"
+  integrity sha512-h9LqIQaAv+CYvWzsZ+h3RsrqCStkBHlgo6/TJlFst3cOTlLghBQlJwPOZKQJTKNaD3QIB7aAVQ+gfWbN3NXB7A==
 
-playwright@^1.45.0:
-  version "1.45.0"
-  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.45.0.tgz#400c709c64438690f13705cb9c88ef93089c5c27"
-  integrity sha512-4z3ac3plDfYzGB6r0Q3LF8POPR20Z8D0aXcxbJvmfMgSSq1hkcgvFRXJk9rUq5H/MJ0Ktal869hhOdI/zUTeLA==
+playwright@^1.46.1:
+  version "1.46.1"
+  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.46.1.tgz#ea562bc48373648e10420a10c16842f0b227c218"
+  integrity sha512-oPcr1yqoXLCkgKtD5eNUPLiN40rYEM39odNpIb6VE6S7/15gJmA1NzVv6zJYusV0e7tzvkU/utBFNa/Kpxmwng==
   dependencies:
-    playwright-core "1.45.0"
+    playwright-core "1.46.1"
   optionalDependencies:
     fsevents "2.3.2"
 
