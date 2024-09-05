@@ -830,10 +830,10 @@
     ora "^7.0.1"
     semver "^7.6.2"
 
-"@vscode/test-web@^0.0.57":
-  version "0.0.57"
-  resolved "https://registry.yarnpkg.com/@vscode/test-web/-/test-web-0.0.57.tgz#e5783fa968476d9fa841b915f6e697396f6249ac"
-  integrity sha512-jlvUdvEZEhbmd+YZ7u4mzC6K7mVnwBmZkP2tv4SAiXXYRYLfdLZ2DnYrnNzQv3zFki5IKXGWSlBMNPj35iP+bw==
+"@vscode/test-web@^0.0.58":
+  version "0.0.58"
+  resolved "https://registry.yarnpkg.com/@vscode/test-web/-/test-web-0.0.58.tgz#eabb9a9671280cad55c676dcbe4d315c5519faa7"
+  integrity sha512-txxUHzjfL1UAJrHtvfKPyfKSf3QjdGJD452qg2ZOjPzlzb+7AmCMUsHdewjQ9ZSr+xmaSc47+DG5F3AvTusYCQ==
   dependencies:
     "@koa/cors" "^5.0.0"
     "@koa/router" "^13.0.0"
