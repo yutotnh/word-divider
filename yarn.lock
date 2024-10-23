@@ -682,10 +682,10 @@
   dependencies:
     playwright-core "1.48.1"
 
-"@types/assert@^1.5.10":
-  version "1.5.10"
-  resolved "https://registry.yarnpkg.com/@types/assert/-/assert-1.5.10.tgz#27eceb3e0705d1d76a4ec0a5586a48921d209eee"
-  integrity sha512-qEO+AUgYab7GVbeDDgUNCU3o0aZUoIMpNAe+w5LDbRxfxQX7vQAdDgwj1AroX+i8KaV56FWg0srXlSZROnsrIQ==
+"@types/assert@^1.5.11":
+  version "1.5.11"
+  resolved "https://registry.yarnpkg.com/@types/assert/-/assert-1.5.11.tgz#0b022efe761e14cca3d0f8ad1fd77a403de0071e"
+  integrity sha512-FjS1mxq2dlGr9N4z72/DO+XmyRS3ZZIoVn998MEopAN/OmyN28F4yumRL5pOw2z+hbFLuWGYuF2rrw5p11xM5A==
 
 "@types/estree@^1.0.5":
   version "1.0.5"
