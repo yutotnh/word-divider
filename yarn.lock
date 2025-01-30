@@ -961,10 +961,10 @@
     "@vscode/vsce-sign-win32-arm64" "2.0.2"
     "@vscode/vsce-sign-win32-x64" "2.0.2"
 
-"@vscode/vsce@^3.2.1":
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/@vscode/vsce/-/vsce-3.2.1.tgz#7bfa869ea43fe7d787f09e164f0f0e239df8fb1d"
-  integrity sha512-AY9vBjwExakK1c0cI/3NN2Ey0EgiKLBye/fxl/ue+o4q6RZ7N+xzd1jAD6eI6eBeMVANi617+V2rxIAkDPco2Q==
+"@vscode/vsce@^3.2.2":
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/@vscode/vsce/-/vsce-3.2.2.tgz#cf65068e3dd51b74756670f231aa9ad2bbeef0de"
+  integrity sha512-4TqdUq/yKlQTHcQMk/DamR632bq/+IJDomSbexOMee/UAYWqYm0XHWA6scGslsCpzY+sCWEhhl0nqdOB0XW1kw==
   dependencies:
     "@azure/identity" "^4.1.0"
     "@vscode/vsce-sign" "^2.0.0"
@@ -972,7 +972,7 @@
     chalk "^2.4.2"
     cheerio "^1.0.0-rc.9"
     cockatiel "^3.1.2"
-    commander "^6.2.1"
+    commander "^12.1.0"
     form-data "^4.0.0"
     glob "^11.0.0"
     hosted-git-info "^4.0.2"
@@ -1652,11 +1652,6 @@ commander@^2.20.0:
   version "2.20.3"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.3.tgz#fd485e84c03eb4881c20722ba48035e8531aeb33"
   integrity sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==
-
-commander@^6.2.1:
-  version "6.2.1"
-  resolved "https://registry.yarnpkg.com/commander/-/commander-6.2.1.tgz#0792eb682dfbc325999bb2b84fddddba110ac73c"
-  integrity sha512-U7VdrJFnJgo4xjrHpTzu0yrHPGImdsmD95ZlgYSEajAn2JKzDhDTPG9kBTefmObL2w/ngeZnilk+OV9CG3d7UA==
 
 comment-json@^4.2.5:
   version "4.2.5"
