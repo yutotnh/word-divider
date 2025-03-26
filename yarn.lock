@@ -703,12 +703,12 @@
   resolved "https://registry.yarnpkg.com/@pkgjs/parseargs/-/parseargs-0.11.0.tgz#a77ea742fab25775145434eb1d2328cf5013ac33"
   integrity sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==
 
-"@playwright/browser-chromium@^1.50.1":
-  version "1.50.1"
-  resolved "https://registry.yarnpkg.com/@playwright/browser-chromium/-/browser-chromium-1.50.1.tgz#2a5a5e200e6de6b0b6782ffc63e65bc1d48b5753"
-  integrity sha512-odDVeETxPjB/TENtKVpfa/p7ZZ1/awda0tgknSDHNd4R2KrE1vrkNysc3rws3mh2ecQf6UOeI15eaUcNm5YxUg==
+"@playwright/browser-chromium@^1.51.1":
+  version "1.51.1"
+  resolved "https://registry.yarnpkg.com/@playwright/browser-chromium/-/browser-chromium-1.51.1.tgz#e8acb129744deacf7dfff90e8e32def0f190b123"
+  integrity sha512-Xebxk0SrDKttd8VGiUwLxOMbuH/Lf/+vFyzFG7QHVvqsAOw3Ec7Xdl1HRB4dnVP/RTEytkH4OgQ4OFy6K2c1xw==
   dependencies:
-    playwright-core "1.50.1"
+    playwright-core "1.51.1"
 
 "@types/assert@^1.5.11":
   version "1.5.11"
@@ -880,23 +880,23 @@
     ora "^7.0.1"
     semver "^7.6.2"
 
-"@vscode/test-web@^0.0.67":
-  version "0.0.67"
-  resolved "https://registry.yarnpkg.com/@vscode/test-web/-/test-web-0.0.67.tgz#9fa682b90755bb4dcf960305b4eaf3006adf56d2"
-  integrity sha512-lds5MHU/l45BXrqGCH39n2lrRcaMBSvcsoV/lg7u7s+A471yUyM4BR0MSsUBaQjvhCJVUOCJCr7VwNkr1iuMBA==
+"@vscode/test-web@^0.0.68":
+  version "0.0.68"
+  resolved "https://registry.yarnpkg.com/@vscode/test-web/-/test-web-0.0.68.tgz#fbf3a767abd9363d93c66c218c10e9edf917f8d4"
+  integrity sha512-MILEpLhFfok1GLl3nI7N3mUTiRxAfQ6Angfb+hK/NRvC2JjPKYb10D9k7VR9xizMu7rAKCRJtfT37nGCP8o5Hw==
   dependencies:
     "@koa/cors" "^5.0.0"
     "@koa/router" "^13.1.0"
-    "@playwright/browser-chromium" "^1.50.1"
+    "@playwright/browser-chromium" "^1.51.1"
     gunzip-maybe "^1.4.2"
     http-proxy-agent "^7.0.2"
     https-proxy-agent "^7.0.6"
-    koa "^2.15.4"
+    koa "^2.16.0"
     koa-morgan "^1.0.1"
     koa-mount "^4.0.0"
     koa-static "^5.0.0"
     minimist "^1.2.8"
-    playwright "^1.50.1"
+    playwright "^1.51.1"
     tar-fs "^3.0.8"
     tinyglobby "0.2.12"
     vscode-uri "^3.1.0"
@@ -3178,7 +3178,7 @@ koa-static@^5.0.0:
     debug "^3.1.0"
     koa-send "^5.0.0"
 
-koa@^2.15.4:
+koa@^2.16.0:
   version "2.16.0"
   resolved "https://registry.yarnpkg.com/koa/-/koa-2.16.0.tgz#0a82ed4d460774ff0b444e361cd6e4bd5c767ee3"
   integrity sha512-Afhqq0Vq3W7C+/rW6IqHVBDLzqObwZ07JaUNUEF8yCQ6afiyFE3RAy+i7V0E46XOWlH7vPWn/x0vsZwNy6PWxw==
@@ -3853,17 +3853,17 @@ pkg-dir@^4.2.0:
   dependencies:
     find-up "^4.0.0"
 
-playwright-core@1.50.1:
-  version "1.50.1"
-  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.50.1.tgz#6a0484f1f1c939168f40f0ab3828c4a1592c4504"
-  integrity sha512-ra9fsNWayuYumt+NiM069M6OkcRb1FZSK8bgi66AtpFoWkg2+y0bJSNmkFrWhMbEBbVKC/EruAHH3g0zmtwGmQ==
+playwright-core@1.51.1:
+  version "1.51.1"
+  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.51.1.tgz#d57f0393e02416f32a47cf82b27533656a8acce1"
+  integrity sha512-/crRMj8+j/Nq5s8QcvegseuyeZPxpQCZb6HNk3Sos3BlZyAknRjoyJPFWkpNn8v0+P3WiwqFF8P+zQo4eqiNuw==
 
-playwright@^1.50.1:
-  version "1.50.1"
-  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.50.1.tgz#2f93216511d65404f676395bfb97b41aa052b180"
-  integrity sha512-G8rwsOQJ63XG6BbKj2w5rHeavFjy5zynBA9zsJMMtBoe/Uf757oG12NXz6e6OirF7RCrTVAKFXbLmn1RbL7Qaw==
+playwright@^1.51.1:
+  version "1.51.1"
+  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.51.1.tgz#ae1467ee318083968ad28d6990db59f47a55390f"
+  integrity sha512-kkx+MB2KQRkyxjYPc3a0wLZZoDczmppyGJIvQ43l+aZihkaVvmu/21kiyaHeHjiFxjxNNFnUncKmcGIyOojsaw==
   dependencies:
-    playwright-core "1.50.1"
+    playwright-core "1.51.1"
   optionalDependencies:
     fsevents "2.3.2"
 
