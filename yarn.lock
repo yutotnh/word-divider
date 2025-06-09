@@ -1065,10 +1065,10 @@
     ora "^8.1.0"
     semver "^7.6.2"
 
-"@vscode/test-web@^0.0.69":
-  version "0.0.69"
-  resolved "https://registry.yarnpkg.com/@vscode/test-web/-/test-web-0.0.69.tgz#4584d03af45eb919103e024b884753d719355f64"
-  integrity sha512-oyxD6eHbooxCDrlNQagMosSs0UtoJHRm7Jg+I88E2Owc8mUlK+bbvo8DaAbfgZpbqFfB4qIp6O3yEG+eNLXQmg==
+"@vscode/test-web@^0.0.70":
+  version "0.0.70"
+  resolved "https://registry.yarnpkg.com/@vscode/test-web/-/test-web-0.0.70.tgz#362ab2956664e6b339d611348beaa03e2bbaa564"
+  integrity sha512-A/rGyPi7MA1btz6z37lmY84k087B804W/Et+3Gy+y4ycI3AgCdYn2Fwjb8kq0LP4E9rRGhKO7ACEndc6d9brAg==
   dependencies:
     "@koa/cors" "^5.0.0"
     "@koa/router" "^13.1.0"
@@ -1082,8 +1082,8 @@
     koa-static "^5.0.0"
     minimist "^1.2.8"
     playwright "^1.52.0"
-    tar-fs "^3.0.8"
-    tinyglobby "0.2.13"
+    tar-fs "^3.0.9"
+    tinyglobby "0.2.14"
     vscode-uri "^3.1.0"
 
 "@vscode/vsce-sign-alpine-arm64@2.0.2":
@@ -4805,10 +4805,10 @@ tar-fs@^2.0.0:
     pump "^3.0.0"
     tar-stream "^2.1.4"
 
-tar-fs@^3.0.8:
-  version "3.0.8"
-  resolved "https://registry.yarnpkg.com/tar-fs/-/tar-fs-3.0.8.tgz#8f62012537d5ff89252d01e48690dc4ebed33ab7"
-  integrity sha512-ZoROL70jptorGAlgAYiLoBLItEKw/fUxg9BSYK/dF/GAGYFJOJJJMvjPAKDJraCXFwadD456FCuvLWgfhMsPwg==
+tar-fs@^3.0.9:
+  version "3.0.9"
+  resolved "https://registry.yarnpkg.com/tar-fs/-/tar-fs-3.0.9.tgz#d570793c6370d7078926c41fa422891566a0b617"
+  integrity sha512-XF4w9Xp+ZQgifKakjZYmFdkLoSWd34VGKcsTCwlNWM7QG3ZbaxnTsaBwnjFZqHRf/rROxaR8rXnbtwdvaDI+lA==
   dependencies:
     pump "^3.0.0"
     tar-stream "^3.1.5"
@@ -4901,10 +4901,10 @@ through2@^2.0.3:
     readable-stream "~2.3.6"
     xtend "~4.0.1"
 
-tinyglobby@0.2.13, tinyglobby@^0.2.13:
-  version "0.2.13"
-  resolved "https://registry.yarnpkg.com/tinyglobby/-/tinyglobby-0.2.13.tgz#a0e46515ce6cbcd65331537e57484af5a7b2ff7e"
-  integrity sha512-mEwzpUgrLySlveBwEVDMKk5B57bhLPYovRfPAXD5gA/98Opn0rCDj3GtLwFvCvH5RK9uPCExUROW5NjDwvqkxw==
+tinyglobby@0.2.14, tinyglobby@^0.2.13:
+  version "0.2.14"
+  resolved "https://registry.yarnpkg.com/tinyglobby/-/tinyglobby-0.2.14.tgz#5280b0cf3f972b050e74ae88406c0a6a58f4079d"
+  integrity sha512-tX5e7OM1HnYr2+a2C/4V0htOcSQcoSTH9KgJnVvNm5zm/cyEWKJ7j7YutsH9CxMdtOkkLFy2AHrMci9IM8IPZQ==
   dependencies:
     fdir "^6.4.4"
     picomatch "^4.0.2"
