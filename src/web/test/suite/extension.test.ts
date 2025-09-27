@@ -1029,6 +1029,72 @@ suite("Extension Test Suite", () => {
     assert.deepStrictEqual(extension.wordEndRightCharacter([], 0), -1, "empty");
   });
 
+  test("wordForSelectionToNextFindMatch", () => {
+    const segments = [
+      { segment: "分かち書き", isWord: true },
+      { segment: "は", isWord: true },
+      { segment: "素晴らしい", isWord: true },
+      { segment: "!", isWord: false },
+    ];
+
+    let testNumber = 0;
+
+    // "分かち書き"
+    assert.deepStrictEqual(
+      extension.wordForSelectionToNextFindMatch(segments, 0),
+      [0, 5],
+    );
+
+    assert.deepStrictEqual(
+      extension.wordForSelectionToNextFindMatch(segments, 1),
+      [0, 5],
+    );
+
+    assert.deepStrictEqual(
+      extension.wordForSelectionToNextFindMatch(segments, 2),
+      [0, 5],
+    );
+
+    ("は");
+    assert.deepStrictEqual(
+      extension.wordForSelectionToNextFindMatch(segments, 5),
+      [5, 6],
+    );
+
+    // "素晴らしい"
+    assert.deepStrictEqual(
+      extension.wordForSelectionToNextFindMatch(segments, 6),
+      [6, 11],
+      `test number: ${testNumber++}`,
+    );
+
+    assert.deepStrictEqual(
+      extension.wordForSelectionToNextFindMatch(segments, 7),
+      [6, 11],
+      `test number: ${testNumber++}`,
+    );
+
+    assert.deepStrictEqual(
+      extension.wordForSelectionToNextFindMatch(segments, 11),
+      [6, 11],
+      `test number: ${testNumber++}`,
+    );
+
+    // "!"
+    assert.deepStrictEqual(
+      extension.wordForSelectionToNextFindMatch(segments, 12),
+      [-1, -1],
+      `test number: ${testNumber++}`,
+    );
+
+    // 空行の場合は-1を返すことの確認
+    assert.deepStrictEqual(
+      extension.wordForSelectionToNextFindMatch([], 0),
+      [-1, -1],
+      "empty",
+    );
+  });
+
   test("stringToSegments", async () => {
     // テストで用いる区切り文字を設定するためデフォルトのeditor.wordSeparatorsを設定する
     await setDefaultWordSeparators();
